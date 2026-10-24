@@ -19,7 +19,7 @@
 
 I build AI agents and automations for problems I have, then ship them. Software engineering at [42 Berlin](https://42berlin.de) until 10/2027.
 
-**Open to** a working-student role at a startup, 15 to 30 hours a week, remote from Berlin.
+**Open to** a working-student or part-time role, 15 to 30 hours a week, remote or in person in Berlin.
 
 <!-- projects:own:start -->
 ## What I'm building
