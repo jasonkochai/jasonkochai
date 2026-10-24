@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -17,6 +18,8 @@ FONTS = ROOT / "scripts" / "fonts"
 ASSETS = ROOT / "assets"
 
 WIDTH = 600
+# Cards shown at full README width but drawn on a wider canvas, so they render smaller.
+WIDE = 840
 
 RADIUS = 14
 
@@ -53,6 +56,7 @@ THEMES: dict[str, dict[str, str]] = {
 BASE_CSS = """
 .paper { fill: var(--paper); }
 .paper-2 { fill: var(--paper-2); }
+.paper-3 { fill: var(--paper-3); }
 .ink { fill: var(--ink); }
 .muted { fill: var(--muted); }
 .accent { fill: var(--accent); }
@@ -167,6 +171,8 @@ class Sheet:
     theme: str
     css: str = ""
     body: list[str] = field(default_factory=list)
+    width: int = WIDTH
+    paper: bool = True
 
     def add(self, *parts: str) -> None:
         """Append raw SVG fragments."""
@@ -175,14 +181,15 @@ class Sheet:
     def render(self) -> str:
         """Return the finished SVG text."""
         tokens = "; ".join(f"--{k}: {v}" for k, v in THEMES[self.theme].items())
+        paper = (f'<rect class="paper" width="{self.width}" height="{self.height}" '
+                 f'rx="{RADIUS}"/>') if self.paper else ""
         return "\n".join([
-            f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" '
-            f'height="{self.height}" viewBox="0 0 {WIDTH} {self.height}" '
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{self.width}" '
+            f'height="{self.height}" viewBox="0 0 {self.width} {self.height}" '
             f'role="img" aria-labelledby="title">',
             f'<title id="title">{escape(self.title)}</title>',
             f"<style>:root {{ {tokens}; }}{BASE_CSS}{self.css}</style>",
-            f'<rect class="paper" width="{WIDTH}" height="{self.height}" '
-            f'rx="{RADIUS}"/>',
+            paper,
             *self.body,
             "</svg>",
             "",
@@ -193,6 +200,20 @@ def frame(width: float, height: float) -> str:
     """Return a hairline border that follows the sheet's rounded corners."""
     return (f'<rect class="line-2" x="0.5" y="0.5" width="{width - 1}" '
             f'height="{height - 1}" rx="{RADIUS - 0.5}"/>')
+
+
+def wave(base: float, amp: float, period: float, length: float,
+         edge: float) -> str:
+    """Return path data for a sine wave along y=base, closed off at y=edge.
+
+    The wave runs from x=0 to x=length; with edge above base the shape is
+    filled upwards, with edge below it is filled downwards.
+    """
+    steps = int(length // 6) + 1
+    pts = " ".join(
+        f"{6 * i:.0f} {base + amp * math.sin(2 * math.pi * 6 * i / period):.1f}"
+        for i in range(steps))
+    return f"M0 {edge}L{pts}L{6 * (steps - 1):.0f} {edge}Z"
 
 
 def write_pair(name: str, build: Callable[[str], Sheet]) -> list[Path]:

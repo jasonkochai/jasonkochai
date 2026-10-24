@@ -13,7 +13,7 @@ from typing import Any
 
 import yaml
 
-from svg import ROOT, Sheet, Text, display, frame, label, write_pair
+from svg import ROOT, WIDE, Sheet, Text, display, frame, label, write_pair
 
 DATA = ROOT / "data" / "stats.json"
 CONFIG = ROOT / "stats.yml"
@@ -175,6 +175,7 @@ def stats_sheet(theme: str, data: dict[str, Any]) -> Sheet:
         f"and {data['active_days']} active days in the last 12 months, "
         f"{data['repositories']} repositories. Languages: {langs}.",
         theme,
+        width=WIDE,
     )
     sheet.css = f"""
 .roll {{ animation: roll 1.3s {EASE} both; }}
@@ -182,9 +183,10 @@ def stats_sheet(theme: str, data: dict[str, Any]) -> Sheet:
 .seg {{ animation: grow-x 0.7s {EASE} both; }}
 @keyframes roll {{ from {{ transform: translateY(0); }} }}
 """
-    x0, x1, cell = 28.0, 572.0, (572.0 - 28.0) / 4
+    x0, x1 = 28.0, WIDE - 28.0
+    cell = (x1 - x0) / 4
     defs: list[str] = []
-    body = [frame(600, 232),
+    body = [frame(WIDE, 232),
             f'<path class="line" d="M{x0} 34H{x1}M{x0} 150H{x1}"/>']
     for i, (key, line1, line2) in enumerate(FIGURES):
         cx = x0 + i * cell
@@ -238,8 +240,9 @@ def activity_sheet(theme: str, data: dict[str, Any]) -> Sheet:
         204,
         f"Contributions per week since {first:%m/%Y}: peak {peak} in one week.",
         theme,
+        width=WIDE,
     )
-    x0, x1, top, base = 36.0, 564.0, 72.0, 156.0
+    x0, x1, top, base = 36.0, WIDE - 36.0, 72.0, 156.0
     slot = (x1 - x0) / max(len(weeks), 26)
     bar = max(slot * 0.55, 3.0)
     sweep = 2.4
@@ -271,7 +274,7 @@ def activity_sheet(theme: str, data: dict[str, Any]) -> Sheet:
     peak_i = max(range(len(weeks)), key=lambda i: weeks[i]["count"])
     peak_x = x0 + slot * peak_i + slot / 2
     sheet.add(
-        frame(600, 204),
+        frame(WIDE, 204),
         Text(display(), f"Contributions per week since {first:%m/%Y}", 18, 36, 44,
              cls="muted").svg(),
         *grid,
