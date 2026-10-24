@@ -1,0 +1,85 @@
+# Single source of truth for the Projects and 42 Berlin sections of README.md.
+# Edit this file, push, and the readme workflow rewrites the README.
+#
+# name       project name as shown
+# group      own (your own work, the main Projects section) or 42 (42 Berlin)
+# status     shipped, building or paused; only shipped own work lands under "Shipped"
+# one_liner  what it does plus the interesting technical bit; no dashes, no middle dots
+# links      label: url, in the order they should appear (a shipped project needs one)
+# image      optional drawing or screenshot: light, dark and alt
+
+projects:
+  - name: Juniper
+    group: own
+    status: building
+    one_liner: >-
+      Multi-agent personal assistant on OpenClaw, self-hosted in Docker on my
+      NAS. One Telegram forum topic per agent: digest, events, email, calendar,
+      notes. Each agent gets only the tools and the model its job needs.
+    links: {}
+    image:
+      light: assets/juniper-light.svg
+      dark: assets/juniper-dark.svg
+      alt: >-
+        Juniper wiring: five Telegram topics reach one OpenClaw gateway in
+        Docker on my NAS; email and calendar go through read-only MCP servers,
+        notes through an Obsidian folder.
+
+  - name: Fly-in
+    group: "42"
+    status: shipped
+    one_liner: >-
+      Routes a drone fleet through a capacity-limited graph in the fewest
+      turns with a time-expanded search. Hits the known optimum on every map.
+      Python.
+    links:
+      Watch it solve: https://fly-in-showcase.vercel.app
+      Code: https://github.com/jasonkochai/42-Fly-in
+
+  - name: A-maze-ing
+    group: "42"
+    status: shipped
+    one_liner: >-
+      Maze generator with a terminal visualiser. Team project: I built the
+      application layer on a pip-installable engine by
+      [@PhilipHim](https://github.com/PhilipHim). Python.
+    links:
+      Code: https://github.com/jasonkochai/42-A-maze-ing
+
+  - name: push_swap
+    group: "42"
+    status: shipped
+    one_liner: >-
+      Sorts a stack with 11 allowed operations, choosing its strategy by the
+      measured disorder of the input. C, team lead.
+    links:
+      Code: https://github.com/jasonkochai/42-push_swap
+
+  - name: Born2beRoot
+    group: "42"
+    status: shipped
+    one_liner: >-
+      Hardened Debian 13 server: encrypted LVM, UFW, Fail2ban, a WordPress
+      stack and a Bash monitoring script.
+    links:
+      Code: https://github.com/jasonkochai/42-Born2beRoot
+
+  - name: Python modules
+    group: "42"
+    status: shipped
+    one_liner: >-
+      11 modules from fundamentals to design patterns, Pydantic and
+      functional programming.
+    links:
+      Code: https://github.com/jasonkochai/42-python_modules
+
+  - name: C foundations
+    group: "42"
+    status: shipped
+    one_liner: >-
+      My own libc subset, printf and line reader, reused across later C
+      projects.
+    links:
+      libft: https://github.com/jasonkochai/42-libft
+      ft_printf: https://github.com/jasonkochai/42-ft_printf
+      get_next_line: https://github.com/jasonkochai/42-get_next_line
