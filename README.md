@@ -29,14 +29,10 @@ I build AI agents and automations for problems I have, then ship them. Software 
 | **Juniper** | Multi-agent personal assistant on OpenClaw, self-hosted in Docker on my home server. One Telegram forum topic per agent: news, events, email, calendar, notes. Each agent gets only the tools and the model its job needs. |
 | **More soon** | More projects are in the works. |
 
-<div align="center">
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/juniper-dark.svg">
-  <img src="assets/juniper-light.svg" width="70%" alt="Juniper wiring: five Telegram topics reach one OpenClaw gateway in Docker on my home server; email and calendar go through read-only MCP servers, notes through an Obsidian folder.">
+  <img src="assets/juniper-light.svg" width="100%" alt="Juniper wiring: five Telegram topics reach one OpenClaw gateway in Docker on my home server; email and calendar go through read-only MCP servers, notes through an Obsidian folder.">
 </picture>
-
-</div>
 
 <!-- projects:own:end -->
 
@@ -62,19 +58,15 @@ I build AI agents and automations for problems I have, then ship them. Software 
 
 ## Stats
 
-<div align="center">
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/stats-dark.svg">
-  <img src="assets/stats-light.svg" width="75%" alt="Contributions, commits, active days and repositories over the last 12 months, with languages by bytes.">
+  <img src="assets/stats-light.svg" width="100%" alt="Contributions, commits, active days and repositories over the last 12 months, with languages by bytes.">
 </picture>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg">
-  <img src="assets/activity-light.svg" width="75%" alt="Contributions per week since my first commit.">
+  <img src="assets/activity-light.svg" width="100%" alt="Contributions per week since my first commit.">
 </picture>
-
-</div>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jasonkochai/jasonkochai/output/snake-dark.svg">
@@ -102,3 +94,7 @@ I build AI agents and automations for problems I have, then ship them. Software 
 
 <!-- projects:42:end -->
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/footer-dark.svg">
+  <img src="assets/footer-light.svg" width="100%" alt="The end (struck through) to be continued.">
+</picture>

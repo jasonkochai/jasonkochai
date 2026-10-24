@@ -143,8 +143,7 @@ def render_own(projects: list[dict[str, Any]]) -> str:
     lines = ["## What I'm building", "", *_table(own), MORE_ROW, ""]
     for p in own:
         if p.get("image"):
-            lines += ['<div align="center">', "", *_picture(p["image"], "70%"),
-                      "", "</div>", ""]
+            lines += [*_picture(p["image"]), ""]
     return "\n".join(lines).rstrip() + "\n"
 
 
