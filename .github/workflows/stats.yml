@@ -26,7 +26,7 @@ jobs:
           else
             echo "STATS_TOKEN is not set; keeping the committed stats SVGs"
           fi
-      - name: Move the header's 'now' marker
+      - name: Move the 42 Berlin 'now' marker
         run: python scripts/build_svgs.py
       - name: Commit if anything changed
         run: |

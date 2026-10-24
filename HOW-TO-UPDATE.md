@@ -4,7 +4,7 @@
 
 1. Open `projects.yml` and add an entry (copy an existing one):
    - `group: own` for your own work, `group: "42"` for 42 Berlin.
-   - `status: shipped`, `building` or `paused`. Your own shipped work shows up under **Shipped** at the top of Projects; building and paused go under **On the bench** with their status.
+   - `status: shipped`, `building` or `paused`. Your own work goes into the What I'm building table, shipped first. The last row, **More soon**, is fixed (`MORE_ROW` in `scripts/build_readme.py`).
    - `one_liner`: what it does plus the interesting technical bit. No em dashes, no middle dots, no "passionate" or "seamless". The build fails on those.
    - `links`: `Label: https://...`, in the order they should show. A shipped project needs at least one.
    - `image` (optional): `light`, `dark` and `alt` for a drawing or screenshot in `assets/`.
@@ -22,7 +22,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 
 ## Stats
 
-The **stats** workflow runs every night at 03:17 UTC. It fetches your numbers, redraws `assets/stats-*.svg` and `assets/activity-*.svg`, and moves the "now" marker in the header.
+The **stats** workflow runs every night at 03:17 UTC. It fetches your numbers, redraws `assets/stats-*.svg` and `assets/activity-*.svg`, and moves the "now" marker on the 42 Berlin card.
 
 It needs one secret, set once:
 
@@ -46,7 +46,7 @@ Locally, `scripts/stats.py` uses your `gh` login. `stats.yml` lists the repos le
 Brand colours from the profile photo: studio navy and the taupe of the shirt, the same as the X and YouTube banners.
 - Navy cards in dark mode, a light blue-grey card in light mode, taupe as the only accent.
 - Familjen Grotesk for everything (OFL, in `scripts/fonts/`). Text inside the SVGs is outlined from the font, so it renders the same everywhere.
-- The header strikes through "the clean way" and brings in "the real way."; the bar under it is your 42 Berlin progress.
+- The header strikes through "the clean way" and brings in "the real way.". Your 42 Berlin progress is its own card at the top of the 42 Berlin section.
 
 Colours live as tokens in `THEMES` in `scripts/svg.py`. Every animation stops under "reduce motion".
 
