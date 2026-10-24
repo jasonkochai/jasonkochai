@@ -1,0 +1,15 @@
+# Settings for scripts/stats.py.
+user: jasonkochai
+
+# Repositories left out of the language bar: third-party templates,
+# generated pages and empty scaffolds. Activity counts still include them.
+exclude_from_languages:
+  - basics
+  - openclaw-guide
+  - demo-project
+  - test_project
+
+# Languages that are build glue, folded into "other".
+fold_languages:
+  - Makefile
+  - Dockerfile
