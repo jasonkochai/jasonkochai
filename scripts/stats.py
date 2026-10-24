@@ -13,7 +13,7 @@ from typing import Any
 
 import yaml
 
-from svg import ROOT, Sheet, Text, display, keylines, mono, write_pair
+from svg import ROOT, Sheet, Text, display, frame, label, write_pair
 
 DATA = ROOT / "data" / "stats.json"
 CONFIG = ROOT / "stats.yml"
@@ -183,13 +183,8 @@ def stats_sheet(theme: str, data: dict[str, Any]) -> Sheet:
 @keyframes roll {{ from {{ transform: translateY(0); }} }}
 """
     x0, x1, cell = 28.0, 572.0, (572.0 - 28.0) / 4
-    defs = [
-        '<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" '
-        'patternTransform="rotate(45)"><path class="heavy" d="M0 0V6"/></pattern>',
-        '<pattern id="dots" width="4" height="4" patternUnits="userSpaceOnUse">'
-        '<rect class="ink" width="1.5" height="1.5"/></pattern>',
-    ]
-    body = [keylines(600, 232),
+    defs: list[str] = []
+    body = [frame(600, 232),
             f'<path class="line" d="M{x0} 34H{x1}M{x0} 150H{x1}"/>']
     for i, (key, line1, line2) in enumerate(FIGURES):
         cx = x0 + i * cell
@@ -203,28 +198,24 @@ def stats_sheet(theme: str, data: dict[str, Any]) -> Sheet:
                     + Text(display(), line2, 18, cx + 12, 143, cls="muted").svg()
                     + "</g>")
 
-    fills = ["ink", "url(#hatch)", "url(#dots)", "none"]
+    fills = ["ink", "accent", "muted", "paper-2"]
     bx, by, bh = x0, 192.0, 12.0
     start = bx
     for i, row in enumerate(data["languages"]):
         w = (x1 - bx) * row["share"]
         fill = fills[min(i, len(fills) - 1)]
         style = f"animation-delay: {0.6 + 0.25 * i:.2f}s"
-        if fill == "ink":
-            body.append(f'<rect class="ink seg from-left" style="{style}" x="{start:.1f}" '
-                        f'y="{by}" width="{w:.1f}" height="{bh}"/>')
-        else:
-            body.append(f'<rect class="seg from-left" style="{style}; fill: {fill}" '
-                        f'x="{start:.1f}" y="{by}" width="{w:.1f}" height="{bh}"/>')
+        body.append(f'<rect class="{fill} seg from-left" style="{style}" x="{start:.1f}" '
+                    f'y="{by}" width="{w:.1f}" height="{bh}"/>')
         label_x = start if i < len(data["languages"]) - 1 or w > 90 else x1
         anchor = "start" if label_x == start else "end"
         name = Text(display(), row["name"], 18, label_x, by - 10, anchor=anchor)
         pct = f"{round(row['share'] * 100)}%"
         if anchor == "start":
-            pct_text = Text(mono(), pct, 16, name.left + name.width + 6, by - 10,
+            pct_text = Text(label(), pct, 16, name.left + name.width + 6, by - 10,
                             cls="muted")
         else:
-            pct_text = Text(mono(), pct, 16, x1, by - 10, anchor="end",
+            pct_text = Text(label(), pct, 16, x1, by - 10, anchor="end",
                             cls="muted")
             name = Text(display(), row["name"], 18,
                         x1 - pct_text.width - 6, by - 10, anchor="end")
@@ -280,17 +271,17 @@ def activity_sheet(theme: str, data: dict[str, Any]) -> Sheet:
     peak_i = max(range(len(weeks)), key=lambda i: weeks[i]["count"])
     peak_x = x0 + slot * peak_i + slot / 2
     sheet.add(
-        keylines(600, 204),
+        frame(600, 204),
         Text(display(), f"Contributions per week since {first:%m/%Y}", 18, 36, 44,
              cls="muted").svg(),
         *grid,
         *bars,
         f'<path class="line" d="M{x0} {base + 0.5}H{x1}"/>',
         '<g class="label">',
-        Text(mono(), str(peak), 16, peak_x, base - (base - top) - 6,
+        Text(label(), str(peak), 16, peak_x, base - (base - top) - 6,
              anchor="middle", cls="muted").svg(),
-        Text(mono(), f"{first:%m/%Y}", 16, x0, base + 24, cls="muted").svg(),
-        Text(mono(), f"{last:%m/%Y}", 16, x1, base + 24, anchor="end",
+        Text(label(), f"{first:%m/%Y}", 16, x0, base + 24, cls="muted").svg(),
+        Text(label(), f"{last:%m/%Y}", 16, x1, base + 24, anchor="end",
              cls="muted").svg(),
         "</g>",
         f'<g class="head"><path class="heavy" d="M{x0} {top - 10}V{base + 6}"/>'

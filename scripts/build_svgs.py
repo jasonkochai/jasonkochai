@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from datetime import date
 
-from svg import Sheet, Text, dimension, display, keylines, mono, write_pair
+from svg import Sheet, Text, display, frame, label, write_pair
 
 EASE = "cubic-bezier(0.22, 1, 0.36, 1)"
 
@@ -21,49 +21,52 @@ def progress(today: date) -> float:
 
 
 def header(theme: str, today: date) -> Sheet:
-    """Return the title block: the name over the 42 Berlin dimension string."""
-    sheet = Sheet(208, "Jason Koch. 42 Berlin, 05/2026 to 10/2027.", theme)
-    name = Text(display(), "JASON KOCH", 72, 36, 100, tracking=-0.012)
-    x0, x1, y = 36.0, 564.0, 156.0
-    now_x = round(x0 + (x1 - x0) * progress(today), 1)
+    """Return the slogan, struck through and corrected, over 42 Berlin progress."""
+    sheet = Sheet(
+        212,
+        "Learning AI, the clean way (struck through) the real way. "
+        "42 Berlin, 05/2026 to 10/2027.",
+        theme,
+    )
+    x0, gap = 40.0, 14.0
+    face = display()
+    per_px = face.width("the clean way", 1) + face.width("the real way.", 1)
+    size = min(50.0, (600 - 2 * x0 - gap) / per_px)
+    first = Text(face, "Learning AI,", size, x0, 86)
+    clean = Text(face, "the clean way", size, x0, 86 + size * 1.12,
+                 cls="muted struck")
+    real = Text(face, "the real way.", size, clean.left + clean.width + gap,
+                clean.y, cls="ink fixed")
+    strike_y = clean.y - size * 0.3
+
+    bx0, bx1, by = 126.0, 496.0, 184.0
+    now_x = round(bx0 + (bx1 - bx0) * progress(today), 1)
     sheet.css = f"""
-.draw {{ animation: draw 1.4s {EASE} both; }}
-.draw + .draw {{ animation-delay: 0.15s; }}
-.cover {{ transform: scaleX(0); transform-box: fill-box; transform-origin: right;
-  animation: uncover 0.9s linear 0.35s both; }}
-.pen {{ opacity: 0; animation: pen 0.9s linear 0.35s both; }}
-.dim {{ animation: grow-x 0.9s {EASE} 1.1s both; }}
-.done {{ animation: grow-x 0.7s {EASE} 1.6s both; }}
-.label {{ animation: fade 0.6s {EASE} 1.5s both; }}
-.marker {{ animation: rise 0.5s {EASE} 2.1s both; }}
-@keyframes uncover {{ from {{ transform: scaleX(1); }} to {{ transform: scaleX(0); }} }}
-@keyframes pen {{
-  from {{ opacity: 1; transform: translateX(0); }}
-  95% {{ opacity: 1; }}
-  to {{ opacity: 0; transform: translateX({name.width:.1f}px); }}
-}}
+.first {{ animation: fade 0.7s {EASE} both; }}
+.struck {{ animation: fade 0.7s {EASE} 0.25s both; }}
+.strike {{ animation: grow-x 0.45s cubic-bezier(0.65, 0, 0.35, 1) 1s both; }}
+.fixed {{ animation: rise 0.6s {EASE} 1.55s both; }}
+.bar {{ animation: fade 0.6s {EASE} 2s both; }}
+.done {{ animation: grow-x 0.8s {EASE} 2.2s both; }}
+.now {{ animation: rise 0.5s {EASE} 2.8s both; }}
 """
-    top = 100 - 72 * 0.74
     sheet.add(
-        keylines(600, 208),
-        name.svg(),
-        f'<rect class="paper cover" x="{name.left - 2}" y="{top - 4:.1f}" '
-        f'width="{name.width + 6:.1f}" height="{72 * 0.74 + 10:.1f}"/>',
-        f'<path class="heavy pen" d="M{name.left} {top - 8:.1f}V{100 + 6}"/>',
-        dimension(x0, x1, y, cls="line dim from-left"),
-        f'<path class="heavy done from-left" d="M{x0} {y}H{now_x}"/>',
-        '<g class="label">',
-        Text(mono(), "05/2026", 20, x0 + 10, y - 12, cls="muted").svg(),
-        Text(mono(), "10/2027", 20, x1 - 10, y - 12, anchor="end",
+        f'<g class="first">{first.svg()}</g>',
+        clean.svg(),
+        f'<rect class="accent strike from-left" x="{clean.left - 4:.1f}" '
+        f'y="{strike_y - 2.5:.1f}" width="{clean.width + 8:.1f}" height="5" '
+        f'rx="2.5" transform="rotate(-1.2 {clean.left:.1f} {strike_y:.1f})"/>',
+        real.svg(),
+        '<g class="bar">',
+        Text(label(), "42 Berlin", 15, x0, by + 5, cls="muted").svg(),
+        f'<rect class="paper-2" x="{bx0}" y="{by - 2}" width="{bx1 - bx0}" '
+        'height="4" rx="2"/>',
+        Text(label(), "10/2027", 15, 600 - x0, by + 5, anchor="end",
              cls="muted").svg(),
-        Text(display(), "42 Berlin", 21, (x0 + x1) / 2, y - 12,
-             anchor="middle").svg(),
         "</g>",
-        '<g class="marker">',
-        f'<path class="ink" d="M{now_x} {y + 4}l6 9h-12z"/>',
-        Text(mono(), today.strftime("%m/%Y"), 17, now_x, y + 33,
-             anchor="middle", cls="muted").svg(),
-        "</g>",
+        f'<rect class="accent done from-left" x="{bx0}" y="{by - 2}" '
+        f'width="{now_x - bx0:.1f}" height="4" rx="2"/>',
+        f'<circle class="ink now" cx="{now_x}" cy="{by}" r="5"/>',
     )
     return sheet
 
@@ -120,7 +123,7 @@ def juniper(theme: str) -> Sheet:
 }}
 """
     sheet.add(
-        keylines(600, height),
+        frame(600, height),
         Text(display(), "Telegram topics", 18, 36, top - 14, cls="muted").svg(),
         Text(display(), "Tools", 18, tool_x, top - 14, cls="muted").svg(),
         f'<path class="line" d="M{box0} {top}H{box1}V{bottom}H{box0}Z"/>',

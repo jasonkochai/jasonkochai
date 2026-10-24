@@ -1,4 +1,4 @@
-"""Shared drawing kit for the profile SVGs: theme tokens, outlined text, keylines."""
+"""Shared drawing kit for the profile SVGs: theme tokens, outlined text, frames."""
 
 from __future__ import annotations
 
@@ -18,54 +18,44 @@ ASSETS = ROOT / "assets"
 
 WIDTH = 600
 
-# Hallmark Blueprint: cyanotype sheet for dark, whiteprint sheet for light.
-# Hex values are the theme's OKLCH tokens converted to sRGB.
+RADIUS = 14
+
+# Brand colours from the profile photo: studio navy backdrop, taupe shirt.
 THEMES: dict[str, dict[str, str]] = {
     "dark": {
-        "paper": "#0d3970",
-        "paper-2": "#062f61",
-        "paper-3": "#012352",
-        "ink": "#eef6fd",
-        "ink-2": "#d0e1ee",
-        "muted": "#a6c2d9",
-        "rule": "rgba(220, 234, 244, 0.85)",
-        "rule-2": "rgba(220, 234, 244, 0.32)",
-        "grid": "rgba(238, 246, 253, 0.09)",
-        "grid-2": "rgba(238, 246, 253, 0.2)",
+        "paper": "#17375e",
+        "paper-2": "#122d4f",
+        "paper-3": "#0d2340",
+        "ink": "#efe9e4",
+        "ink-2": "#d9d1cb",
+        "muted": "#93a6bd",
+        "accent": "#a5908b",
+        "rule": "rgba(239, 233, 228, 0.55)",
+        "rule-2": "rgba(239, 233, 228, 0.18)",
+        "grid": "rgba(239, 233, 228, 0.07)",
+        "grid-2": "rgba(239, 233, 228, 0.14)",
     },
     "light": {
-        "paper": "#f3f7fa",
-        "paper-2": "#e7eef3",
-        "paper-3": "#dce6ee",
-        "ink": "#0d3970",
-        "ink-2": "#1f4a80",
-        "muted": "#4d6b91",
-        "rule": "rgba(13, 57, 112, 0.85)",
-        "rule-2": "rgba(13, 57, 112, 0.32)",
-        "grid": "rgba(13, 57, 112, 0.07)",
-        "grid-2": "rgba(13, 57, 112, 0.16)",
+        "paper": "#f4f6f9",
+        "paper-2": "#e8edf3",
+        "paper-3": "#dde4ec",
+        "ink": "#17375e",
+        "ink-2": "#2a4b75",
+        "muted": "#5d7391",
+        "accent": "#8a746e",
+        "rule": "rgba(23, 55, 94, 0.55)",
+        "rule-2": "rgba(23, 55, 94, 0.16)",
+        "grid": "rgba(23, 55, 94, 0.06)",
+        "grid-2": "rgba(23, 55, 94, 0.13)",
     },
 }
-
-SHEETS = {"light": "whiteprint", "dark": "cyanotype"}
-
-STAMP = (
-    "/* Hallmark \u00b7 shape: profile README, drawing set \u00b7 genre: modern-minimal"
-    " \u00b7 theme: Blueprint (deal 1/3) \u00b7 blueprint: {sheet} \u00b7 job: hire\n"
-    " * signature: the title block over the 42 Berlin dimension string"
-    " \u00b7 imagery: drawings of real data, no photographs\n"
-    " * axes: mid/geometric-sans/neutral \u00b7 posture: drenched"
-    " \u00b7 contrast: pass \u00b7 v2.0.0 */\n"
-    "/* Hallmark \u00b7 pre-emit critique: P4 H4 E4 S5 R4 V5 \u00b7 weakest: P,"
-    " the drawing look could turn into costume; every line, end and label"
-    " carries a real fact */\n"
-)
 
 BASE_CSS = """
 .paper { fill: var(--paper); }
 .paper-2 { fill: var(--paper-2); }
 .ink { fill: var(--ink); }
 .muted { fill: var(--muted); }
+.accent { fill: var(--accent); }
 .line { fill: none; stroke: var(--rule); stroke-width: 1; }
 .line-2 { fill: none; stroke: var(--rule-2); stroke-width: 1; }
 .heavy { fill: none; stroke: var(--ink); stroke-width: 2; }
@@ -125,14 +115,14 @@ def _num(value: float) -> str:
 
 @lru_cache(maxsize=None)
 def display() -> Face:
-    """Return Chakra Petch SemiBold, the drafted capitals."""
-    return Face("ChakraPetch-SemiBold.ttf")
+    """Return Familjen Grotesk SemiBold, for headlines and names."""
+    return Face("FamiljenGrotesk-SemiBold.ttf")
 
 
 @lru_cache(maxsize=None)
-def mono() -> Face:
-    """Return IBM Plex Mono Medium, for dates and measurements."""
-    return Face("IBMPlexMono-Medium.ttf")
+def label() -> Face:
+    """Return Familjen Grotesk Medium, for dates, numbers and captions."""
+    return Face("FamiljenGrotesk-Medium.ttf")
 
 
 @dataclass
@@ -190,40 +180,19 @@ class Sheet:
             f'height="{self.height}" viewBox="0 0 {WIDTH} {self.height}" '
             f'role="img" aria-labelledby="title">',
             f'<title id="title">{escape(self.title)}</title>',
-            "<style>" + STAMP.format(sheet=SHEETS[self.theme])
-            + f":root {{ {tokens}; }}{BASE_CSS}{self.css}</style>",
-            f'<rect class="paper" width="{WIDTH}" height="{self.height}"/>',
+            f"<style>:root {{ {tokens}; }}{BASE_CSS}{self.css}</style>",
+            f'<rect class="paper" width="{WIDTH}" height="{self.height}" '
+            f'rx="{RADIUS}"/>',
             *self.body,
             "</svg>",
             "",
         ])
 
 
-def keylines(width: float, height: float, cls: str = "line draw",
-             style: str = "") -> str:
-    """Return the sheet's double keyline: an outer rule and one 5px inside."""
-    def frame(inset: float, klass: str) -> str:
-        x0, y0 = inset + 0.5, inset + 0.5
-        x1, y1 = width - inset - 0.5, height - inset - 0.5
-        d = f"M{x0} {y0}H{x1}V{y1}H{x0}Z"
-        st = f' style="{style}"' if style else ""
-        return f'<path class="{klass}" pathLength="1"{st} d="{d}"/>'
-
-    return frame(8, cls) + frame(13, cls.replace("line", "line-2"))
-
-
-def dimension(x0: float, x1: float, y: float, tick: float = 14,
-              cls: str = "line", attrs: str = "") -> str:
-    """Return a dimension string: a hairline with 45 degree ticks at both ends."""
-    h = tick / 2
-    extra = f" {attrs}" if attrs else ""
-    return (
-        f'<g class="{cls}"{extra}>'
-        f'<path d="M{x0} {y}H{x1}"/>'
-        f'<path d="M{x0 - h} {y + h}L{x0 + h} {y - h}M{x1 - h} {y + h}L{x1 + h} {y - h}"/>'
-        f'<path d="M{x0} {y - tick}V{y + tick}M{x1} {y - tick}V{y + tick}"/>'
-        "</g>"
-    )
+def frame(width: float, height: float) -> str:
+    """Return a hairline border that follows the sheet's rounded corners."""
+    return (f'<rect class="line-2" x="0.5" y="0.5" width="{width - 1}" '
+            f'height="{height - 1}" rx="{RADIUS - 0.5}"/>')
 
 
 def write_pair(name: str, build: Callable[[str], Sheet]) -> list[Path]:
