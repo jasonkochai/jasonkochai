@@ -18,7 +18,7 @@ STATUSES = ("shipped", "building", "paused")
 GROUPS = ("own", "42")
 MAX_ONE_LINER = 240
 
-MORE_ROW = "| **More soon** | More agents and automations are in the works. |"
+MORE_ROW = "| **More soon** | More projects are in the works. |"
 SCHOOL = {
     "light": "assets/school-light.svg",
     "dark": "assets/school-dark.svg",

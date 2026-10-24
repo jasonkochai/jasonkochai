@@ -27,7 +27,7 @@ I build AI agents and automations for problems I have, then ship them. Software 
 | Project | What it does |
 |:---|:---|
 | **Juniper** | Multi-agent personal assistant on OpenClaw, self-hosted in Docker on my home server. One Telegram forum topic per agent: news, events, email, calendar, notes. Each agent gets only the tools and the model its job needs. |
-| **More soon** | More agents and automations are in the works. |
+| **More soon** | More projects are in the works. |
 
 <div align="center">
 
