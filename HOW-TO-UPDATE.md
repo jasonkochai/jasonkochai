@@ -37,15 +37,21 @@ Locally, `scripts/stats.py` uses your `gh` login. `stats.yml` lists the repos le
 
 ## Text that changes by hand
 
-- **Age, intro, interests, Works with, Path:** edit `README.md` directly, outside the `<!-- projects:... -->` markers.
+- **Intro, What I learned, links, stack:** edit `README.md` directly, outside the `<!-- projects:... -->` markers.
 - **Header dates** (42 Berlin, 05/2026 to 10/2027): `START` and `FINISH` in `scripts/build_svgs.py`. Then run `.venv/bin/python scripts/build_svgs.py`.
 - **Juniper drawing:** `TOPICS` and `TOOLS` in `scripts/build_svgs.py`.
 
 ## Look
 
-The design is hallmark's Blueprint theme:
-- Whiteprint sheet in light mode, cyanotype in dark.
-- Chakra Petch for drafted heads, IBM Plex Mono for dates.
-- One hue, square keylines, no second colour.
+Brand colours from the profile photo: studio navy and the taupe of the shirt, the same as the X and YouTube banners.
+- Navy cards in dark mode, a light blue-grey card in light mode, taupe as the only accent.
+- Familjen Grotesk for everything (OFL, in `scripts/fonts/`). Text inside the SVGs is outlined from the font, so it renders the same everywhere.
+- The header strikes through "the clean way" and brings in "the real way."; the bar under it is your 42 Berlin progress.
 
-Colours live as tokens in `THEMES` in `scripts/svg.py`. Text inside the SVGs is outlined from the fonts in `scripts/fonts/` (OFL), so it renders the same everywhere. Every animation stops under "reduce motion".
+Colours live as tokens in `THEMES` in `scripts/svg.py`. Every animation stops under "reduce motion".
+
+## Widgets
+
+- **Typing line** under the header: edit the `lines=` part of its URL in `README.md`. Sentences are separated by `;`, spaces are `+`, a comma is `%2C`.
+- **Badges and stack:** plain `<img>` tags in `README.md` (shields.io and skillicons.dev).
+- **Snake:** the **snake** workflow redraws it every night onto the `output` branch. Run it once by hand (Actions, snake, Run workflow) after the first push.
