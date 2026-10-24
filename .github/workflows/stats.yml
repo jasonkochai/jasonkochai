@@ -1,0 +1,37 @@
+name: stats
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  draw:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -r requirements.txt
+      - name: Fetch stats and redraw (skipped without STATS_TOKEN)
+        env:
+          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
+        run: |
+          if [ -n "$STATS_TOKEN" ]; then
+            python scripts/stats.py
+          else
+            echo "STATS_TOKEN is not set; keeping the committed stats SVGs"
+          fi
+      - name: Move the header's 'now' marker
+        run: python scripts/build_svgs.py
+      - name: Commit if anything changed
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore(stats): nightly refresh"
+          git push
