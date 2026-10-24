@@ -1,0 +1,34 @@
+name: snake
+
+on:
+  schedule:
+    - cron: "47 3 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/snake.yml
+
+permissions:
+  contents: write
+
+jobs:
+  draw:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Draw the snake eating the contribution graph
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/snake-light.svg?color_snake=#17375e&color_dots=#e8edf3,#c3cfdd,#93a6bd,#5d7391,#17375e
+            dist/snake-dark.svg?color_snake=#a5908b&color_dots=#161b22,#1d3a5f,#2b5283,#5d7fa8,#93a6bd
+
+      - name: Publish to the output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+          commit_message: "chore(snake): redraw"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
