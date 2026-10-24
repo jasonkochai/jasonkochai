@@ -1,29 +1,30 @@
+<div align="center">
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg">
-  <img src="assets/header-light.svg" width="100%" alt="Jason Koch. 42 Berlin, 05/2026 to 10/2027.">
+  <img src="assets/header-light.svg" width="100%" alt="Learning AI, the clean way (struck through) the real way. 42 Berlin, 05/2026 to 10/2027.">
 </picture>
 
-### I build AI agents and automation for problems I have, then ship them.
+<p><img src="https://readme-typing-svg.demolab.com?font=Familjen+Grotesk&weight=500&size=21&duration=2600&pause=1400&color=8A746E&center=true&vCenter=true&width=560&lines=Obsessed+with+AI;Claude+Code+is+my+daily+driver;Building+Juniper%2C+my+own+multi-agent+assistant;Self-hosting+everything+on+my+NAS;Learning+software+engineering+at+42+Berlin" alt="Obsessed with AI. Claude Code is my daily driver. Building Juniper, my own multi-agent assistant. Self-hosting everything on my NAS. Learning software engineering at 42 Berlin."></p>
 
-21, Berlin. Software engineering at [42 Berlin](https://42berlin.de) since May 2026 (peer-to-peer, no teachers), finishing 10/2027. I learn new tech fast and try new AI tools as soon as they land. When something in my life or work repeats, I look for a way to automate it.
+<p>
+<a href="https://linkedin.com/in/jason-koch-ai"><img src="https://img.shields.io/badge/LinkedIn-17375e?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik00IDloMy41djExSDR6TTUuNzUgMy41YTIgMiAwIDEgMSAwIDQgMiAyIDAgMCAxIDAtNHpNOS41IDloMy40djEuNmMuNS0uOSAxLjctMS45IDMuNi0xLjkgMy42IDAgNC4yIDIuMyA0LjIgNS40VjIwaC0zLjV2LTUuMmMwLTEuMyAwLTIuOS0xLjgtMi45cy0yLjEgMS40LTIuMSAyLjhWMjBIOS41eiIvPjwvc3ZnPg%3D%3D" alt="LinkedIn"></a>
+<a href="https://x.com/jasonkochai"><img src="https://img.shields.io/badge/X-17375e?style=for-the-badge&logo=x&logoColor=white" alt="X"></a>
+<a href="https://youtube.com/@jasonkochai"><img src="https://img.shields.io/badge/YouTube-17375e?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube"></a>
+<a href="https://instagram.com/jasonkochai"><img src="https://img.shields.io/badge/Instagram-17375e?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram"></a>
+<a href="mailto:business@jason-koch.com"><img src="https://img.shields.io/badge/Mail-8a746e?style=for-the-badge&logo=gmail&logoColor=white" alt="Mail"></a>
+</p>
+
+</div>
+
+I build AI agents and automations for problems I have, then ship them. Software engineering at [42 Berlin](https://42berlin.de) until 10/2027.
 
 **Open to** a working-student role at a startup, 15 to 30 hours a week, remote from Berlin.
 
-[LinkedIn](https://linkedin.com/in/jason-koch-ai) or [business@jason-koch.com](mailto:business@jason-koch.com)
-
-## Interests
-
-- **At work:** AI agents that run real parts of my day, automating anything that repeats, self-hosting on my own hardware, trying new AI tools early.
-- **Off screen:** bouldering, travel, content creation and video.
-
-## Works with
-
-**Code:** Python, C, Bash<br>
-**Systems:** Linux (Debian), Docker, Git, Tailscale, Vercel<br>
-**AI:** Claude Code, OpenClaw, Ollama, MCP, LLM APIs
+**What I learned:** Python, C, object-oriented design, data structures, graph algorithms, memory management, Linux system administration, Docker, Git, multi-agent AI systems, teamwork
 
 <!-- projects:own:start -->
-## Projects
+## What I'm building
 
 ### On the bench
 
@@ -38,18 +39,42 @@
 
 <!-- projects:own:end -->
 
-## Numbers
+## Stack
+
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=py,c,bash,linux,debian,docker,git,vercel&theme=dark">
+  <img src="https://skillicons.dev/icons?i=py,c,bash,linux,debian,docker,git,vercel&theme=light" alt="Python, C, Bash, Linux, Debian, Docker, Git, Vercel">
+</picture>
+
+<p>
+<img src="https://img.shields.io/badge/Claude_Code-17375e?style=flat-square&logo=claude&logoColor=white" alt="Claude Code">
+<img src="https://img.shields.io/badge/OpenClaw-17375e?style=flat-square" alt="OpenClaw">
+<img src="https://img.shields.io/badge/Ollama-17375e?style=flat-square&logo=ollama&logoColor=white" alt="Ollama">
+<img src="https://img.shields.io/badge/MCP-17375e?style=flat-square&logo=modelcontextprotocol&logoColor=white" alt="MCP">
+<img src="https://img.shields.io/badge/LLM_APIs-17375e?style=flat-square&logo=anthropic&logoColor=white" alt="LLM APIs">
+<img src="https://img.shields.io/badge/Tailscale-17375e?style=flat-square&logo=tailscale&logoColor=white" alt="Tailscale">
+</p>
+
+</div>
+
+## Stats
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/stats-dark.svg">
   <img src="assets/stats-light.svg" width="100%" alt="Contributions, commits, active days and repositories over the last 12 months, with languages by bytes.">
 </picture>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg">
   <img src="assets/activity-light.svg" width="100%" alt="Contributions per week since my first commit.">
 </picture>
 
-<sub>Generated from all my repositories, private ones included, by <a href="scripts/stats.py">stats.py</a> through the GitHub API and rebuilt every night. Languages count bytes and leave out templates and generated pages.</sub>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jasonkochai/jasonkochai/output/snake-dark.svg">
+  <img src="https://raw.githubusercontent.com/jasonkochai/jasonkochai/output/snake-light.svg" width="100%" alt="A snake eating my contribution graph.">
+</picture>
 
 <!-- projects:42:start -->
 ## 42 Berlin
@@ -65,15 +90,4 @@
 
 <!-- projects:42:end -->
 
-## Path
-
-| When | What |
-|:---|:---|
-| 2026 | Admitted to 42 Berlin through the Piscine in March. Nebius AI Leader Certification in October. |
-| 2025/26 | Sales and customer service at MediaMarkt, electronics and IT. |
-| 2024/25 | 15 months working and travelling through Australia, Oceania and Asia, including two cattle and sheep farms in Australia. |
-| 2024 | Abitur, 1.5. |
-
-German (native), English (C1+), Russian (grew up bilingual).
-
-<sub>Project lists are generated from <a href="projects.yml">projects.yml</a> by a GitHub Action.</sub>
+<sub>Stats come from all my repositories, private ones included, drawn by <a href="scripts/stats.py">stats.py</a> and rebuilt every night with the snake. Project tables are generated from <a href="projects.yml">projects.yml</a>.</sub>

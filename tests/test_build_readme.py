@@ -94,7 +94,7 @@ def test_build_rewrites_only_between_markers_and_is_idempotent():
     once = br.build(FRAME, projects)
     assert once.startswith("# Me\n\n")
     assert "old" not in once
-    assert "## Projects" in once and "## 42 Berlin" in once
+    assert "## What I'm building" in once and "## 42 Berlin" in once
     assert br.build(once, projects) == once
 
 

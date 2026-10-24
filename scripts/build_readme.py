@@ -133,13 +133,13 @@ def _picture(p: dict[str, Any]) -> list[str]:
 
 
 def render_own(projects: list[dict[str, Any]]) -> str:
-    """Return the Projects section: Shipped first, then On the bench."""
+    """Return the What I'm building section: Shipped first, then On the bench."""
     own = [p for p in projects if str(p["group"]) == "own"]
     if not own:
         return ""
     shipped = [p for p in own if p["status"] == "shipped"]
     bench = [p for p in own if p["status"] != "shipped"]
-    lines = ["## Projects", ""]
+    lines = ["## What I'm building", ""]
     if shipped:
         lines += ["### Shipped", "", *_table(shipped), ""]
     if bench:
