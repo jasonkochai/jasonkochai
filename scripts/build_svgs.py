@@ -86,7 +86,7 @@ def juniper(theme: str) -> Sheet:
     sheet = Sheet(
         height,
         "Juniper wiring: five Telegram topics (digest, events, email, "
-        "calendar, notes) reach one OpenClaw gateway in Docker on my NAS. "
+        "calendar, notes) reach one OpenClaw gateway in Docker on my home server. "
         "Email and calendar agents read through read-only MCP servers, "
         "notes through an Obsidian folder.",
         theme,
@@ -133,9 +133,9 @@ def juniper(theme: str) -> Sheet:
         f'V{bottom - 5}H{gx0 + 5}Z"/>',
         Text(display(), "OpenClaw", 24, (gx0 + gx1) / 2, mid - 12,
              anchor="middle").svg(),
-        Text(display(), "Docker on my NAS", 18, (gx0 + gx1) / 2, mid + 16,
+        Text(display(), "Docker, home server", 16.5, (gx0 + gx1) / 2, mid + 16,
              anchor="middle", cls="muted").svg(),
-        Text(display(), "one Telegram bot", 18, (gx0 + gx1) / 2, mid + 40,
+        Text(display(), "one Telegram bot", 16.5, (gx0 + gx1) / 2, mid + 40,
              anchor="middle", cls="muted").svg(),
     )
     for i, (topic, y) in enumerate(zip(TOPICS, rows)):

@@ -14,15 +14,15 @@ projects:
     status: building
     one_liner: >-
       Multi-agent personal assistant on OpenClaw, self-hosted in Docker on my
-      NAS. One Telegram forum topic per agent: digest, events, email, calendar,
-      notes. Each agent gets only the tools and the model its job needs.
+      home server. One Telegram forum topic per agent: digest, events, email,
+      calendar, notes. Each agent gets only the tools and the model its job needs.
     links: {}
     image:
       light: assets/juniper-light.svg
       dark: assets/juniper-dark.svg
       alt: >-
         Juniper wiring: five Telegram topics reach one OpenClaw gateway in
-        Docker on my NAS; email and calendar go through read-only MCP servers,
+        Docker on my home server; email and calendar go through read-only MCP servers,
         notes through an Obsidian folder.
 
   - name: Fly-in
