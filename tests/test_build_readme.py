@@ -66,22 +66,32 @@ def test_missing_image_file_is_flagged(tmp_path: Path):
     assert any("a.svg does not exist" in p for p in problems)
 
 
-def test_shipped_section_only_appears_with_shipped_own_work():
-    bench_only = br.render_own([project(status="building", links={})])
-    assert "### Shipped" not in bench_only
-    assert "### On the bench" in bench_only
-    both = br.render_own([project(), project(name="Other", status="paused")])
-    assert both.index("### Shipped") < both.index("### On the bench")
+def test_own_work_is_one_table_with_shipped_first():
+    out = br.render_own([project(name="Other", status="paused"), project()])
+    assert "###" not in out
+    assert out.index("**Thing**") < out.index("**Other**")
+
+
+def test_own_table_ends_with_the_more_row():
+    out = br.render_own([project(status="building", links={})])
+    rows = [line for line in out.splitlines() if line.startswith("|")]
+    assert rows[-1] == br.MORE_ROW
 
 
 def test_no_own_projects_renders_nothing():
     assert br.render_own([project(group="42")]) == ""
 
 
-def test_bench_rows_carry_status_and_links():
+def test_rows_show_name_and_links_without_status():
     out = br.render_own([project(status="paused")])
-    assert "| **Thing**<br>paused |" in out
+    assert "| **Thing** |" in out
+    assert "paused" not in out
     assert "[Code](https://example.com/thing)" in out
+
+
+def test_42_section_opens_with_the_progress_card():
+    out = br.render_42([project(group="42")])
+    assert out.index(br.SCHOOL["light"]) < out.index("| Project |")
 
 
 def test_pipes_in_copy_are_escaped():

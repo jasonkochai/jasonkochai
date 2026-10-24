@@ -18,6 +18,13 @@ STATUSES = ("shipped", "building", "paused")
 GROUPS = ("own", "42")
 MAX_ONE_LINER = 240
 
+MORE_ROW = "| **More soon** | More agents and automations are in the works. |"
+SCHOOL = {
+    "light": "assets/school-light.svg",
+    "dark": "assets/school-dark.svg",
+    "alt": "42 Berlin progress from 05/2026 to 10/2027, today marked.",
+}
+
 # Copy the profile never uses (hallmark gate 19 plus the profile's own list).
 BANNED_WORDS = [
     "passionate", "tech enthusiast", "always learning", "love to code",
@@ -106,56 +113,47 @@ def _links(p: dict[str, Any]) -> str:
     return ", ".join(f"[{label}]({url})" for label, url in links.items())
 
 
-def _row(p: dict[str, Any], status: bool = False) -> str:
-    name = f"**{_cell(p['name'])}**"
-    if status:
-        name += f"<br>{p['status']}"
+def _row(p: dict[str, Any]) -> str:
     what = _cell(p["one_liner"])
     if p.get("links"):
         what += f"<br>{_links(p)}"
-    return f"| {name} | {what} |"
+    return f"| **{_cell(p['name'])}** | {what} |"
 
 
-def _table(rows: list[dict[str, Any]], status: bool = False) -> list[str]:
-    return ["| Project | What it does |", "|:---|:---|",
-            *(_row(p, status) for p in rows)]
+def _table(rows: list[dict[str, Any]]) -> list[str]:
+    return ["| Project | What it does |", "|:---|:---|", *(_row(p) for p in rows)]
 
 
-def _picture(p: dict[str, Any]) -> list[str]:
-    image = p["image"]
+def _picture(image: dict[str, str], width: str = "100%") -> list[str]:
     alt = _cell(image["alt"]).replace('"', "&quot;")
     return [
         "<picture>",
         f'  <source media="(prefers-color-scheme: dark)" srcset="{image["dark"]}">',
-        f'  <img src="{image["light"]}" width="100%" alt="{alt}">',
+        f'  <img src="{image["light"]}" width="{width}" alt="{alt}">',
         "</picture>",
     ]
 
 
 def render_own(projects: list[dict[str, Any]]) -> str:
-    """Return the What I'm building section: Shipped first, then On the bench."""
+    """Return the What I'm building section: one table, shipped work first."""
     own = [p for p in projects if str(p["group"]) == "own"]
     if not own:
         return ""
-    shipped = [p for p in own if p["status"] == "shipped"]
-    bench = [p for p in own if p["status"] != "shipped"]
-    lines = ["## What I'm building", ""]
-    if shipped:
-        lines += ["### Shipped", "", *_table(shipped), ""]
-    if bench:
-        lines += ["### On the bench", "", *_table(bench, status=True), ""]
-        for p in bench:
-            if p.get("image"):
-                lines += [*_picture(p), ""]
+    own.sort(key=lambda p: STATUSES.index(p["status"]))
+    lines = ["## What I'm building", "", *_table(own), MORE_ROW, ""]
+    for p in own:
+        if p.get("image"):
+            lines += ['<div align="center">', "", *_picture(p["image"], "70%"),
+                      "", "</div>", ""]
     return "\n".join(lines).rstrip() + "\n"
 
 
 def render_42(projects: list[dict[str, Any]]) -> str:
-    """Return the 42 Berlin section."""
+    """Return the 42 Berlin section: the progress card over the project table."""
     rows = [p for p in projects if str(p["group"]) == "42"]
     if not rows:
         return ""
-    lines = ["## 42 Berlin", "", *_table(rows)]
+    lines = ["## 42 Berlin", "", *_picture(SCHOOL), "", *_table(rows)]
     return "\n".join(lines) + "\n"
 
 

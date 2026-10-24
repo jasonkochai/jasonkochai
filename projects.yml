@@ -14,7 +14,7 @@ projects:
     status: building
     one_liner: >-
       Multi-agent personal assistant on OpenClaw, self-hosted in Docker on my
-      home server. One Telegram forum topic per agent: digest, events, email,
+      home server. One Telegram forum topic per agent: news, events, email,
       calendar, notes. Each agent gets only the tools and the model its job needs.
     links: {}
     image:
@@ -63,23 +63,3 @@ projects:
       stack and a Bash monitoring script.
     links:
       Code: https://github.com/jasonkochai/42-Born2beRoot
-
-  - name: Python modules
-    group: "42"
-    status: shipped
-    one_liner: >-
-      11 modules from fundamentals to design patterns, Pydantic and
-      functional programming.
-    links:
-      Code: https://github.com/jasonkochai/42-python_modules
-
-  - name: C foundations
-    group: "42"
-    status: shipped
-    one_liner: >-
-      My own libc subset, printf and line reader, reused across later C
-      projects.
-    links:
-      libft: https://github.com/jasonkochai/42-libft
-      ft_printf: https://github.com/jasonkochai/42-ft_printf
-      get_next_line: https://github.com/jasonkochai/42-get_next_line
