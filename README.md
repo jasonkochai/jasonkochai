@@ -44,8 +44,8 @@ I build AI agents and automations for problems I have, then ship them. Software 
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=py,c,bash,linux,debian,docker,git,vercel&theme=dark">
-  <img src="https://skillicons.dev/icons?i=py,c,bash,linux,debian,docker,git,vercel&theme=light" alt="Python, C, Bash, Linux, Debian, Docker, Git, Vercel">
+  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=py%2Cc%2Cbash%2Clinux%2Cdebian%2Cdocker%2Cgit%2Cvercel&theme=dark">
+  <img src="https://skillicons.dev/icons?i=py%2Cc%2Cbash%2Clinux%2Cdebian%2Cdocker%2Cgit%2Cvercel&theme=light" alt="Python, C, Bash, Linux, Debian, Docker, Git, Vercel">
 </picture>
 
 <p>
