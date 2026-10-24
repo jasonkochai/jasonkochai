@@ -1,4 +1,4 @@
-"""Build the header and Juniper drawings, light and dark."""
+"""Build the header, 42 Berlin progress and Juniper drawings, light and dark."""
 
 from __future__ import annotations
 
@@ -20,35 +20,28 @@ def progress(today: date) -> float:
     return min(max((today - START).days / span, 0.0), 1.0)
 
 
-def header(theme: str, today: date) -> Sheet:
-    """Return the slogan, struck through and corrected, over 42 Berlin progress."""
+def header(theme: str) -> Sheet:
+    """Return the slogan: "the clean way" struck through, "the real way." after it."""
     sheet = Sheet(
-        212,
-        "Learning AI, the clean way (struck through) the real way. "
-        "42 Berlin, 05/2026 to 10/2027.",
+        182,
+        "Learning AI, the clean way (struck through) the real way.",
         theme,
     )
     x0, gap = 40.0, 14.0
     face = display()
     per_px = face.width("the clean way", 1) + face.width("the real way.", 1)
     size = min(50.0, (600 - 2 * x0 - gap) / per_px)
-    first = Text(face, "Learning AI,", size, x0, 86)
-    clean = Text(face, "the clean way", size, x0, 86 + size * 1.12,
+    first = Text(face, "Learning AI,", size, x0, 80)
+    clean = Text(face, "the clean way", size, x0, 80 + size * 1.12,
                  cls="muted struck")
     real = Text(face, "the real way.", size, clean.left + clean.width + gap,
                 clean.y, cls="ink fixed")
     strike_y = clean.y - size * 0.3
-
-    bx0, bx1, by = 126.0, 496.0, 184.0
-    now_x = round(bx0 + (bx1 - bx0) * progress(today), 1)
     sheet.css = f"""
 .first {{ animation: fade 0.7s {EASE} both; }}
 .struck {{ animation: fade 0.7s {EASE} 0.25s both; }}
 .strike {{ animation: grow-x 0.45s cubic-bezier(0.65, 0, 0.35, 1) 1s both; }}
 .fixed {{ animation: rise 0.6s {EASE} 1.55s both; }}
-.bar {{ animation: fade 0.6s {EASE} 2s both; }}
-.done {{ animation: grow-x 0.8s {EASE} 2.2s both; }}
-.now {{ animation: rise 0.5s {EASE} 2.8s both; }}
 """
     sheet.add(
         f'<g class="first">{first.svg()}</g>',
@@ -57,21 +50,44 @@ def header(theme: str, today: date) -> Sheet:
         f'y="{strike_y - 2.5:.1f}" width="{clean.width + 8:.1f}" height="5" '
         f'rx="2.5" transform="rotate(-1.2 {clean.left:.1f} {strike_y:.1f})"/>',
         real.svg(),
-        '<g class="bar">',
-        Text(label(), "42 Berlin", 15, x0, by + 5, cls="muted").svg(),
-        f'<rect class="paper-2" x="{bx0}" y="{by - 2}" width="{bx1 - bx0}" '
-        'height="4" rx="2"/>',
-        Text(label(), "10/2027", 15, 600 - x0, by + 5, anchor="end",
-             cls="muted").svg(),
-        "</g>",
-        f'<rect class="accent done from-left" x="{bx0}" y="{by - 2}" '
-        f'width="{now_x - bx0:.1f}" height="4" rx="2"/>',
-        f'<circle class="ink now" cx="{now_x}" cy="{by}" r="5"/>',
     )
     return sheet
 
 
-TOPICS = ["digest", "events", "email", "calendar", "notes"]
+def school(theme: str, today: date) -> Sheet:
+    """Return the 42 Berlin progress bar from START to FINISH with today marked."""
+    sheet = Sheet(
+        72,
+        f"42 Berlin, {START:%m/%Y} to {FINISH:%m/%Y}. "
+        f"{round(progress(today) * 100)}% done.",
+        theme,
+    )
+    bx0, bx1, y = 200.0, 470.0, 36.0
+    now_x = round(bx0 + (bx1 - bx0) * progress(today), 1)
+    sheet.css = f"""
+.bar {{ animation: fade 0.6s {EASE} both; }}
+.done {{ animation: grow-x 0.9s {EASE} 0.3s both; }}
+.now {{ animation: rise 0.5s {EASE} 1.1s both; }}
+"""
+    sheet.add(
+        frame(600, 72),
+        '<g class="bar">',
+        Text(display(), "42 Berlin", 18, 28, y + 6).svg(),
+        Text(label(), f"{START:%m/%Y}", 14, bx0 - 12, y + 5, anchor="end",
+             cls="muted").svg(),
+        f'<rect class="paper-2" x="{bx0}" y="{y - 2}" width="{bx1 - bx0}" '
+        'height="4" rx="2"/>',
+        Text(label(), f"{FINISH:%m/%Y}", 14, bx1 + 12, y + 5,
+             cls="muted").svg(),
+        "</g>",
+        f'<rect class="accent done from-left" x="{bx0}" y="{y - 2}" '
+        f'width="{now_x - bx0:.1f}" height="4" rx="2"/>',
+        f'<circle class="ink now" cx="{now_x}" cy="{y}" r="5"/>',
+    )
+    return sheet
+
+
+TOPICS = ["news", "events", "email", "calendar", "notes"]
 TOOLS = {
     "email": "IMAP, read-only MCP",
     "calendar": "CalDAV, read-only MCP",
@@ -85,7 +101,7 @@ def juniper(theme: str) -> Sheet:
     height = rows[-1] + 50
     sheet = Sheet(
         height,
-        "Juniper wiring: five Telegram topics (digest, events, email, "
+        "Juniper wiring: five Telegram topics (news, events, email, "
         "calendar, notes) reach one OpenClaw gateway in Docker on my home server. "
         "Email and calendar agents read through read-only MCP servers, "
         "notes through an Obsidian folder.",
@@ -160,13 +176,14 @@ def juniper(theme: str) -> Sheet:
 
 
 def main() -> None:
-    """Write the header and Juniper SVG pairs into assets/."""
+    """Write the header, 42 Berlin and Juniper SVG pairs into assets/."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--today", type=date.fromisoformat,
                         default=date.today(),
                         help="date for the 'now' marker (YYYY-MM-DD)")
     args = parser.parse_args()
-    write_pair("header", lambda theme: header(theme, args.today))
+    write_pair("header", header)
+    write_pair("school", lambda theme: school(theme, args.today))
     write_pair("juniper", juniper)
 
 
