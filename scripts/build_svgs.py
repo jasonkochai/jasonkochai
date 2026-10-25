@@ -148,6 +148,67 @@ def footer(theme: str) -> Sheet:
     return sheet
 
 
+SENTENCES = [
+    "Obsessed with AI",
+    "Claude Code is my daily driver",
+    "Building Juniper, my own multi-agent assistant",
+    "Self-hosting on my home server and a VPS",
+    "Many more projects in the works",
+    "Learning software engineering at 42 Berlin",
+]
+SLOT = 4.0  # seconds each sentence is on screen
+
+
+def typing(theme: str) -> Sheet:
+    """Return the sentences typed out one after another, each erased before the next."""
+    width, height, size = 600, 40, 21.0
+    total = SLOT * len(SENTENCES)
+
+    def pct(secs: float) -> str:
+        return f"{100 * secs / total:.2f}%"
+
+    type_end, erase_start = pct(SLOT * 0.4), pct(SLOT * 0.85)
+    sheet = Sheet(height, "; ".join(SENTENCES) + ".", theme, width=width,
+                  paper=False)
+    css = [f"""
+.reveal {{ transform-box: fill-box; transform-origin: left; transform: scaleX(0);
+  animation: {total}s linear infinite both; }}
+.caret {{ opacity: 0; animation: {total}s linear infinite; }}  /* hidden while waiting */
+.blink {{ animation: blink 0.9s steps(1) infinite; }}
+@keyframes blink {{ 50% {{ opacity: 0; }} }}
+"""]
+    parts = []
+    face = label()
+    for i, sentence in enumerate(SENTENCES):
+        text = Text(face, sentence, size, width / 2, 27, anchor="middle", cls="accent")
+        n = len(sentence)
+        delay = f"animation-delay: {SLOT * i:.1f}s"
+        css.append(f"""
+@keyframes type-{i} {{
+  0% {{ transform: scaleX(0); animation-timing-function: steps({n}, end); }}
+  {type_end}, {erase_start} {{ transform: scaleX(1); animation-timing-function: steps({n}, end); }}
+  {pct(SLOT)}, 100% {{ transform: scaleX(0); }}
+}}
+@keyframes caret-{i} {{
+  0% {{ opacity: 1; transform: translateX(0); animation-timing-function: steps({n}, end); }}
+  {type_end}, {erase_start} {{ opacity: 1; transform: translateX({text.width:.1f}px);
+    animation-timing-function: steps({n}, end); }}
+  {pct(SLOT * 0.999)} {{ opacity: 1; transform: translateX(0); }}
+  {pct(SLOT)}, 100% {{ opacity: 0; transform: translateX(0); }}
+}}""")
+        parts.append(
+            f'<clipPath id="t{i}"><rect class="reveal" style="animation-name: type-{i}; '
+            f'{delay}" x="{text.left - 1:.1f}" y="0" width="{text.width + 2:.1f}" '
+            f'height="{height}"/></clipPath>'
+            f'<g clip-path="url(#t{i})">{text.svg()}</g>'
+            f'<g class="caret" style="animation-name: caret-{i}; {delay}">'
+            f'<rect class="accent blink" x="{text.left + 1:.1f}" y="8" width="2" '
+            'height="24" rx="1"/></g>')
+    sheet.css = "".join(css)
+    sheet.add(*parts)
+    return sheet
+
+
 def school(theme: str, today: date) -> Sheet:
     """Return the 42 Berlin progress line: share done, filling track, today pulsing."""
     done = progress(today)
@@ -193,6 +254,7 @@ def main() -> None:
     args = parser.parse_args()
     write_pair("header", header)
     write_pair("footer", footer)
+    write_pair("typing", typing)
     write_pair("school", lambda theme: school(theme, args.today))
 
 
