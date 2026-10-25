@@ -68,8 +68,6 @@ I build what I can't stop thinking about, then ship it. Right now that's mostly 
   <img src="assets/activity-light.svg" width="100%" alt="Contributions per week since my first commit.">
 </picture>
 
-<sub>Includes private repositories.</sub>
-
 <!-- projects:42:start -->
 ## 42 Berlin
 

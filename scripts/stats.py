@@ -251,7 +251,8 @@ def activity_sheet(theme: str, data: dict[str, Any]) -> Sheet:
     peak = max(w["count"] for w in weeks) or 1
     sheet = Sheet(
         204,
-        f"Contributions per week since {first:%m/%Y}: peak {peak} in one week.",
+        f"Contributions per week since {first:%m/%Y}, private repositories included: "
+        f"peak {peak} in one week.",
         theme,
         width=WIDE,
     )
@@ -288,7 +289,8 @@ def activity_sheet(theme: str, data: dict[str, Any]) -> Sheet:
     peak_x = x0 + slot * peak_i + slot / 2
     sheet.add(
         frame(WIDE, 204),
-        Text(display(), f"Contributions per week since {first:%m/%Y}", 18, 36, 44,
+        Text(display(), f"Contributions per week since {first:%m/%Y}, private repositories "
+             "included", 18, 36, 44,
              cls="muted").svg(),
         *grid,
         *bars,
