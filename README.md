@@ -17,7 +17,7 @@
 
 </div>
 
-I build what I can't stop thinking about, then ship it. Right now that's mostly AI agents and automations, but any project I'm excited about is fair game. Software engineering at [42 Berlin](https://42berlin.de) until 10/2027.
+I build AI agents, automations and projects I care about, then ship them. Software engineering at [42 Berlin](https://42berlin.de) until 10/2027.
 
 **Open to** a working-student or part-time role, 15 to 30 hours a week, remote or in person in Berlin.
 
