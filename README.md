@@ -5,9 +5,9 @@
   <img src="assets/header-light.svg" width="100%" alt="Learning AI, the clean way (struck through) the real way. 42 Berlin, 05/2026 to 10/2027.">
 </picture>
 
-<p><img src="https://readme-typing-svg.demolab.com?font=Familjen+Grotesk&weight=500&size=21&duration=2600&pause=1400&color=8A746E&center=true&vCenter=true&width=560&lines=Obsessed+with+AI;Claude+Code+is+my+daily+driver;Building+Juniper%2C+my+own+multi-agent+assistant;Self-hosting+on+my+home+server+and+a+VPS;Many+more+projects+in+the+works;Learning+software+engineering+at+42+Berlin" alt="Obsessed with AI. Claude Code is my daily driver. Building Juniper, my own multi-agent assistant. Self-hosting on my home server and a VPS. Many more projects in the works. Learning software engineering at 42 Berlin."></p>
-
 <p>
+<img src="https://readme-typing-svg.demolab.com?font=Familjen+Grotesk&weight=500&size=21&duration=2600&pause=1400&color=8A746E&center=true&vCenter=true&width=560&lines=Obsessed+with+AI;Claude+Code+is+my+daily+driver;Building+Juniper%2C+my+own+multi-agent+assistant;Self-hosting+on+my+home+server+and+a+VPS;Many+more+projects+in+the+works;Learning+software+engineering+at+42+Berlin" alt="Obsessed with AI. Claude Code is my daily driver. Building Juniper, my own multi-agent assistant. Self-hosting on my home server and a VPS. Many more projects in the works. Learning software engineering at 42 Berlin.">
+<br>
 <a href="https://linkedin.com/in/jason-koch-ai"><img src="https://img.shields.io/badge/LinkedIn-17375e?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik00IDloMy41djExSDR6TTUuNzUgMy41YTIgMiAwIDEgMSAwIDQgMiAyIDAgMCAxIDAtNHpNOS41IDloMy40djEuNmMuNS0uOSAxLjctMS45IDMuNi0xLjkgMy42IDAgNC4yIDIuMyA0LjIgNS40VjIwaC0zLjV2LTUuMmMwLTEuMyAwLTIuOS0xLjgtMi45cy0yLjEgMS40LTIuMSAyLjhWMjBIOS41eiIvPjwvc3ZnPg%3D%3D" alt="LinkedIn"></a>
 <a href="https://x.com/jasonkochai"><img src="https://img.shields.io/badge/X-17375e?style=for-the-badge&logo=x&logoColor=white" alt="X"></a>
 <a href="https://youtube.com/@jasonkochai"><img src="https://img.shields.io/badge/YouTube-17375e?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube"></a>
@@ -28,11 +28,6 @@ I build AI agents and automations for problems I have, then ship them. Software 
 |:---|:---|
 | **Juniper** | Multi-agent personal assistant on OpenClaw, self-hosted in Docker on my home server. One Telegram forum topic per agent: news, events, email, calendar, notes. Each agent gets only the tools and the model its job needs. |
 | **More soon** | More projects are in the works. |
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/juniper-dark.svg">
-  <img src="assets/juniper-light.svg" width="100%" alt="Juniper wiring: five Telegram topics reach one OpenClaw gateway in Docker on my home server; email and calendar go through read-only MCP servers, notes through an Obsidian folder.">
-</picture>
 
 <!-- projects:own:end -->
 
