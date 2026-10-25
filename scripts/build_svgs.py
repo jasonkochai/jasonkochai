@@ -75,7 +75,7 @@ def silk(top: float = 0.0) -> str:
     keeps moving without ever repeating in step.
     """
     # threads run just past the ribbon; where they rise above the card it hides them
-    threads = [_between(FRONT, RIBBON, 1.35, 1), _between(FRONT, RIBBON, 1.5, 2)]
+    threads = [_between(FRONT, RIBBON, 1.1, 1), _between(FRONT, RIBBON, 1.2, 2)]
     parts = [f'<path class="accent">{_morph([_band(c, top) for c in RIBBON], 14)}</path>']
     for curves, secs, alpha in zip(threads, (9, 17), (0.6, 0.35)):
         parts.append(f'<path class="thread" opacity="{alpha}">'
@@ -121,7 +121,7 @@ def struck_line(face_size: float, before: str, after: str, x: float, y: float,
 
 def header(theme: str) -> Sheet:
     """Return the slogan card, its bottom edge flowing like silk."""
-    sheet = Sheet(244, "Learning AI, the clean way (struck through) the real way.",
+    sheet = Sheet(226, "Learning AI, the clean way (struck through) the real way.",
                   theme, paper=False)
     x0 = 40.0
     face = display()
@@ -137,7 +137,7 @@ def header(theme: str) -> Sheet:
 
 def footer(theme: str) -> Sheet:
     """Return the closing card: the same silk edge mirrored on top, "the end" struck."""
-    top, low = 110.0, 244.0  # card starts at top; low is just past the deepest thread
+    top, low = 110.0, 226.0  # card starts at top; low is just past the deepest thread
     height = low - top
     sheet = Sheet(int(height), "The end (struck through) to be continued.", theme,
                   paper=False)
