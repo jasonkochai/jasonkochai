@@ -9,7 +9,7 @@
    - `links`: `Label: https://...`, in the order they should show. A shipped project needs at least one.
    - `image` (optional): `light`, `dark` and `alt` for a drawing or screenshot in `assets/`.
 2. Push to `main`. The **readme** workflow rewrites the project tables in `README.md` and commits the result.
-3. When Juniper gets its public repo, add `Code: https://github.com/jasonkochai/<repo>` under its `links`, and switch its `status` when it ships.
+3. Juniper's diagram lives in the private repo `jasonkochai/juniper`. When you make that repo public, add `Code: https://github.com/jasonkochai/juniper` under its `links`.
 
 To preview locally:
 
@@ -22,7 +22,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 
 ## Stats
 
-The **stats** workflow runs every night at 03:17 UTC. It fetches your numbers, redraws `assets/stats-*.svg` and `assets/activity-*.svg`, and moves the "now" marker on the 42 Berlin card.
+The **stats** workflow runs every night at 03:17 UTC. It fetches your numbers, redraws `assets/stats-*.svg` and `assets/activity-*.svg`, and moves the "now" dot on the 42 Berlin progress line.
 
 It needs one secret, set once:
 
@@ -38,17 +38,16 @@ Locally, `scripts/stats.py` uses your `gh` login. `stats.yml` lists the repos le
 ## Text that changes by hand
 
 - **Intro, What I learned, links, stack:** edit `README.md` directly, outside the `<!-- projects:... -->` markers.
-- **Header dates** (42 Berlin, 05/2026 to 10/2027): `START` and `FINISH` in `scripts/build_svgs.py`. Then run `.venv/bin/python scripts/build_svgs.py`.
-- **Juniper drawing:** `TOPICS` and `TOOLS` in `scripts/build_svgs.py`.
+- **42 Berlin dates** (42 Berlin, 05/2026 to 10/2027): `START` and `FINISH` in `scripts/build_svgs.py`. Then run `.venv/bin/python scripts/build_svgs.py`.
 
 ## Look
 
 Brand colours from the profile photo: studio navy and the taupe of the shirt, the same as the X and YouTube banners.
 - Navy cards in dark mode, a light blue-grey card in light mode, taupe as the only accent.
 - Familjen Grotesk for everything (OFL, in `scripts/fonts/`). Text inside the SVGs is outlined from the font, so it renders the same everywhere.
-- The header strikes through "the clean way" and brings in "the real way.". Your 42 Berlin progress is its own card at the top of the 42 Berlin section.
+- The header strikes through "the clean way" and brings in "the real way.". Your 42 Berlin progress is a thin line at the top of the 42 Berlin section.
 - The header opens onto drifting waves (navy in front, taupe behind) and the footer closes the page the same way, striking "the end" for "to be continued.".
-- Stats, activity, Juniper and the 42 Berlin card are drawn on a wider canvas (`WIDE` in `scripts/svg.py`), so they fill the README width but render smaller. Raise `WIDE` to shrink them further.
+- Stats, activity and the 42 Berlin line are drawn on a wider canvas (`WIDE` in `scripts/svg.py`), so they fill the README width but render smaller. Raise `WIDE` to shrink them further.
 
 Colours live as tokens in `THEMES` in `scripts/svg.py`. Every animation stops under "reduce motion".
 
@@ -57,3 +56,5 @@ Colours live as tokens in `THEMES` in `scripts/svg.py`. Every animation stops un
 - **Typing line** under the header: edit the `lines=` part of its URL in `README.md`. Sentences are separated by `;`, spaces are `+`, a comma is `%2C`.
 - **Badges and stack:** plain `<img>` tags in `README.md` (shields.io and skillicons.dev).
 - **Snake:** the **snake** workflow redraws it every night onto the `output` branch. Run it once by hand (Actions, snake, Run workflow) after the first push.
+
+The language bar shows the languages in `language_order` (in `stats.yml`) first, then the rest by size, with other last.
