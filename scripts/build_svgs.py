@@ -156,42 +156,41 @@ SENTENCES = [
     "Many more projects in the works",
     "Learning software engineering at 42 Berlin",
 ]
-SLOT = 4.0  # seconds each sentence is on screen
+TYPE, HOLD, ERASE = 0.055, 1.4, 0.022  # seconds per letter typed, held, per letter erased
 
 
 def typing(theme: str) -> Sheet:
-    """Return the sentences typed out one after another, each erased before the next."""
+    """Return the sentences typed out one after another, each erased before the next.
+
+    Each sentence reveals one whole letter at a time (a clip that widens to
+    the next letter edge) and starts the moment the previous one ends, the
+    same pacing as readme-typing-svg.
+    """
     width, height, size = 600, 40, 21.0
-    total = SLOT * len(SENTENCES)
-
-    def pct(secs: float) -> str:
-        return f"{100 * secs / total:.2f}%"
-
-    type_end, erase_start = pct(SLOT * 0.4), pct(SLOT * 0.85)
     sheet = Sheet(height, "; ".join(SENTENCES) + ".", theme, width=width,
                   paper=False)
-    css = [f"""
-.reveal {{ transform-box: fill-box; transform-origin: left; transform: scaleX(0);
-  animation: {total}s linear infinite both; }}
-"""]
-    parts = []
     face = label()
+    last = len(SENTENCES) - 1
+    parts = []
     for i, sentence in enumerate(SENTENCES):
         text = Text(face, sentence, size, width / 2, 27, anchor="middle", cls="accent")
+        edges = [0.0] + [face.width(sentence[:k], size) for k in range(1, len(sentence) + 1)]
         n = len(sentence)
-        delay = f"animation-delay: {SLOT * i:.1f}s"
-        css.append(f"""
-@keyframes type-{i} {{
-  0% {{ transform: scaleX(0); animation-timing-function: steps({n}, end); }}
-  {type_end}, {erase_start} {{ transform: scaleX(1); animation-timing-function: steps({n}, end); }}
-  {pct(SLOT)}, 100% {{ transform: scaleX(0); }}
-}}""")
+        typed, held = n * TYPE, n * TYPE + HOLD
+        dur = held + n * ERASE
+        widths = edges + edges[-2::-1]
+        times = ([k * TYPE for k in range(n + 1)]
+                 + [held + k * ERASE for k in range(1, n + 1)])
+        times[n] = typed
+        values = ";".join(f"{w + 2:.1f}" if w else "0" for w in widths)
+        key_times = ";".join(f"{t / dur:.4f}" for t in times)
+        begin = f"0s;s{last}.end" if i == 0 else f"s{i - 1}.end"
         parts.append(
-            f'<clipPath id="t{i}"><rect class="reveal" style="animation-name: type-{i}; '
-            f'{delay}" x="{text.left - 1:.1f}" y="0" width="{text.width + 2:.1f}" '
-            f'height="{height}"/></clipPath>'
+            f'<clipPath id="t{i}"><rect x="{text.left - 1:.1f}" y="0" width="0" '
+            f'height="{height}"><animate id="s{i}" attributeName="width" '
+            f'begin="{begin}" dur="{dur:.3f}s" calcMode="discrete" fill="remove" '
+            f'values="{values}" keyTimes="{key_times}"/></rect></clipPath>'
             f'<g clip-path="url(#t{i})">{text.svg()}</g>')
-    sheet.css = "".join(css)
     sheet.add(*parts)
     return sheet
 
