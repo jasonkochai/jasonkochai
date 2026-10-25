@@ -173,9 +173,6 @@ def typing(theme: str) -> Sheet:
     css = [f"""
 .reveal {{ transform-box: fill-box; transform-origin: left; transform: scaleX(0);
   animation: {total}s linear infinite both; }}
-.caret {{ opacity: 0; animation: {total}s linear infinite; }}  /* hidden while waiting */
-.blink {{ animation: blink 0.9s steps(1) infinite; }}
-@keyframes blink {{ 50% {{ opacity: 0; }} }}
 """]
     parts = []
     face = label()
@@ -188,22 +185,12 @@ def typing(theme: str) -> Sheet:
   0% {{ transform: scaleX(0); animation-timing-function: steps({n}, end); }}
   {type_end}, {erase_start} {{ transform: scaleX(1); animation-timing-function: steps({n}, end); }}
   {pct(SLOT)}, 100% {{ transform: scaleX(0); }}
-}}
-@keyframes caret-{i} {{
-  0% {{ opacity: 1; transform: translateX(0); animation-timing-function: steps({n}, end); }}
-  {type_end}, {erase_start} {{ opacity: 1; transform: translateX({text.width:.1f}px);
-    animation-timing-function: steps({n}, end); }}
-  {pct(SLOT * 0.999)} {{ opacity: 1; transform: translateX(0); }}
-  {pct(SLOT)}, 100% {{ opacity: 0; transform: translateX(0); }}
 }}""")
         parts.append(
             f'<clipPath id="t{i}"><rect class="reveal" style="animation-name: type-{i}; '
             f'{delay}" x="{text.left - 1:.1f}" y="0" width="{text.width + 2:.1f}" '
             f'height="{height}"/></clipPath>'
-            f'<g clip-path="url(#t{i})">{text.svg()}</g>'
-            f'<g class="caret" style="animation-name: caret-{i}; {delay}">'
-            f'<rect class="accent blink" x="{text.left + 1:.1f}" y="8" width="2" '
-            'height="24" rx="1"/></g>')
+            f'<g clip-path="url(#t{i})">{text.svg()}</g>')
     sheet.css = "".join(css)
     sheet.add(*parts)
     return sheet
