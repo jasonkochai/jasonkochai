@@ -54,6 +54,11 @@ I build what I can't stop thinking about, then ship it. Right now that's mostly 
 ## Stats
 
 <picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jasonkochai/jasonkochai/output/snake-dark.svg">
+  <img src="https://raw.githubusercontent.com/jasonkochai/jasonkochai/output/snake-light.svg" width="100%" alt="A snake eating my contribution graph.">
+</picture>
+
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/stats-dark.svg">
   <img src="assets/stats-light.svg" width="100%" alt="Contributions, commits, active days and repositories over the last 12 months, with languages by bytes.">
 </picture>
@@ -61,11 +66,6 @@ I build what I can't stop thinking about, then ship it. Right now that's mostly 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg">
   <img src="assets/activity-light.svg" width="100%" alt="Contributions per week since my first commit.">
-</picture>
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jasonkochai/jasonkochai/output/snake-dark.svg">
-  <img src="https://raw.githubusercontent.com/jasonkochai/jasonkochai/output/snake-light.svg" width="100%" alt="A snake eating my contribution graph.">
 </picture>
 
 <sub>Stats come from all my repositories, private ones included, drawn by <a href="scripts/stats.py">stats.py</a> and rebuilt every night with the snake. Project tables are generated from <a href="projects.yml">projects.yml</a>.</sub>
