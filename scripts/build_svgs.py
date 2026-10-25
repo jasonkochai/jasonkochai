@@ -20,45 +20,76 @@ def progress(today: date) -> float:
     return min(max((today - START).days / span, 0.0), 1.0)
 
 
-RISE = 20.0  # how much the cut climbs from left to right
-CUT_CSS = f"""
-.band {{ animation: grow-x 0.8s {EASE} 0.2s both; }}
-.thread {{ transform-box: fill-box; transform-origin: right;
-  animation: grow-x 0.9s {EASE} 0.45s both; }}
-.glint {{ animation: glint 4.5s ease-in-out 1.4s infinite; }}
-@keyframes glint {{ 0% {{ transform: translateX(-140px); }}
-  55%, 100% {{ transform: translateX(740px); }} }}
-"""
+# Card edge shapes the ribbons bend between: (left y, control 1, control 2, right y).
+Curve = tuple[float, tuple[float, float], tuple[float, float], float]
+FRONT: list[Curve] = [(196, (150, 150), (420, 232), 170),
+                      (160, (200, 226), (380, 150), 204),
+                      (184, (120, 160), (470, 214), 158)]
+RIBBON: list[Curve] = [(214, (180, 240), (400, 170), 200),
+                       (190, (160, 170), (430, 246), 222),
+                       (206, (220, 236), (380, 180), 184)]
+EASE_SPLINE = "0.45 0 0.55 1"
 
 
-def cut(name: str, y: float, side: str) -> str:
-    """Return the slanted cut: a taupe band with a glint and a chalk thread.
+def _between(a: list[Curve], b: list[Curve], t: float, shift: int) -> list[Curve]:
+    """Return curves a fraction t of the way from a to b, b rotated by shift."""
+    out: list[Curve] = []
+    for i, (yl, (c1x, c1y), (c2x, c2y), yr) in enumerate(a):
+        bl, (d1x, d1y), (d2x, d2y), br = b[(i + shift) % len(b)]
 
-    y is where the cut meets the left edge; it climbs RISE to the right.
-    side "below" puts band and thread under the card (header), "above" puts
-    them over it (footer).
+        def mix(u: float, v: float) -> float:
+            return round(u + (v - u) * t, 1)
+        out.append((mix(yl, bl), (mix(c1x, d1x), mix(c1y, d1y)),
+                    (mix(c2x, d2x), mix(c2y, d2y)), mix(yr, br)))
+    return out
+
+
+def _morph(shapes: list[str], secs: float) -> str:
+    """Return a SMIL animation looping the path through shapes and back."""
+    values = ";".join([*shapes, shapes[0]])
+    splines = ";".join([EASE_SPLINE] * len(shapes))
+    return (f'<animate attributeName="d" dur="{secs}s" repeatCount="indefinite" '
+            f'calcMode="spline" keySplines="{splines}" values="{values}"/>')
+
+
+def _card(c: Curve, top: float) -> str:
+    yl, (c1x, c1y), (c2x, c2y), yr = c
+    return (f"M0 {yl}V{top + 14}A14 14 0 0 1 14 {top}H586A14 14 0 0 1 600 {top + 14}"
+            f"V{yr}C{c2x} {c2y} {c1x} {c1y} 0 {yl}Z")
+
+
+def _band(c: Curve, top: float) -> str:
+    yl, (c1x, c1y), (c2x, c2y), yr = c
+    return f"M0 {top + 40}H600V{yr}C{c2x} {c2y} {c1x} {c1y} 0 {yl}Z"
+
+
+def _thread(c: Curve) -> str:
+    yl, (c1x, c1y), (c2x, c2y), yr = c
+    return f"M0 {yl}C{c1x} {c1y} {c2x} {c2y} 600 {yr}"
+
+
+def silk(top: float = 0.0) -> str:
+    """Return the card with a flowing edge: taupe ribbon, two chalk threads, card.
+
+    Every layer bends between its own shapes on its own timing, so the edge
+    keeps moving without ever repeating in step.
     """
-    def edge(offset: float) -> tuple[float, float]:
-        return y + offset, y - RISE + offset
+    threads = [_between(FRONT, RIBBON, 0.45, 1), _between(FRONT, RIBBON, 0.8, 2)]
+    parts = [f'<path class="accent">{_morph([_band(c, top) for c in RIBBON], 14)}</path>']
+    for curves, secs, alpha in zip(threads, (9, 17), (0.6, 0.35)):
+        parts.append(f'<path class="thread" opacity="{alpha}">'
+                     f'{_morph([_thread(c) for c in curves], secs)}</path>')
+    parts.append(f'<path class="paper">{_morph([_card(c, top) for c in FRONT], 11)}</path>')
+    first = [f'd="{_band(RIBBON[0], top)}"', f'd="{_thread(threads[0][0])}"',
+             f'd="{_thread(threads[1][0])}"', f'd="{_card(FRONT[0], top)}"']
+    for i, d in enumerate(first):
+        parts[i] = parts[i].replace("<path ", f"<path {d} ", 1)
+    return "".join(parts)
 
-    sign = 1 if side == "below" else -1
-    (a0, a1), (b0, b1) = edge(0), edge(10 * sign)
-    t0, t1 = edge(17 * sign)
-    band = f"M0 {a0}L600 {a1}L600 {b1}L0 {b0}Z"
-    return (
-        f'<defs><clipPath id="{name}-band"><path d="{band}"/></clipPath>'
-        f'<linearGradient id="{name}-shine" x1="0" x2="1">'
-        '<stop offset="0" stop-color="#fff" stop-opacity="0"/>'
-        '<stop offset="0.5" stop-color="#fff" stop-opacity="0.55"/>'
-        '<stop offset="1" stop-color="#fff" stop-opacity="0"/>'
-        "</linearGradient></defs>"
-        f'<path class="accent band from-left" d="{band}"/>'
-        f'<g clip-path="url(#{name}-band)"><rect class="glint" x="0" '
-        f'y="{min(a1, b1) - 2}" width="110" height="{RISE + 14}" '
-        f'fill="url(#{name}-shine)"/></g>'
-        f'<path class="ink thread" opacity="0.4" '
-        f'd="M0 {t0 - 1}L600 {t1 - 1}L600 {t1 + 1}L0 {t0 + 1}Z"/>'
-    )
+
+SILK_CSS = """
+.thread { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+"""
 
 
 def struck_line(face_size: float, before: str, after: str, x: float, y: float,
@@ -88,41 +119,31 @@ def struck_line(face_size: float, before: str, after: str, x: float, y: float,
 
 
 def header(theme: str) -> Sheet:
-    """Return the slogan card, cut off at a slant above a taupe band."""
-    sheet = Sheet(204, "Learning AI, the clean way (struck through) the real way.",
+    """Return the slogan card, its bottom edge flowing like silk."""
+    sheet = Sheet(238, "Learning AI, the clean way (struck through) the real way.",
                   theme, paper=False)
-    x0, y = 40.0, 178.0
+    x0 = 40.0
     face = display()
     per_px = (face.width("the clean way", 1) + face.width("the real way.", 1)) * 1.03
     size = min(50.0, (600 - 2 * x0) / per_px)
     first = Text(face, "Learning AI,", size, x0, 80)
     css, line = struck_line(size, "the clean way", "the real way.", x0,
                             80 + size * 1.12, "start", 0.0)
-    sheet.css = f".first {{ animation: fade 0.7s {EASE} both; }}{css}{CUT_CSS}"
-    sheet.add(
-        f'<path class="paper" d="M0 {y}V14A14 14 0 0 1 14 0H586A14 14 0 0 1 600 14'
-        f'V{y - RISE}Z"/>',
-        cut("header", y, "below"),
-        f'<g class="first">{first.svg()}</g>',
-        *line,
-    )
+    sheet.css = f".first {{ animation: fade 0.7s {EASE} both; }}{css}{SILK_CSS}"
+    sheet.add(silk(), f'<g class="first">{first.svg()}</g>', *line)
     return sheet
 
 
 def footer(theme: str) -> Sheet:
-    """Return the closing card: the same slanted cut on top, "the end" struck."""
-    height, y = 134, 44.0
-    sheet = Sheet(height, "The end (struck through) to be continued.", theme,
+    """Return the closing card: the same silk edge mirrored on top, "the end" struck."""
+    top, low = 110.0, 238.0  # card starts at top; low is the deepest the ribbon gets
+    height = low - top
+    sheet = Sheet(int(height), "The end (struck through) to be continued.", theme,
                   paper=False)
-    css, line = struck_line(30.0, "the end", "to be continued.", 300.0, 104.0,
+    css, line = struck_line(28.0, "the end", "to be continued.", 300.0, height - 22,
                             "middle", 0.3)
-    sheet.css = css + CUT_CSS
-    sheet.add(
-        f'<path class="paper" d="M0 {y}L600 {y - RISE}V{height - 14}'
-        f'A14 14 0 0 1 586 {height}H14A14 14 0 0 1 0 {height - 14}Z"/>',
-        cut("footer", y, "above"),
-        *line,
-    )
+    sheet.css = css + SILK_CSS
+    sheet.add(f'<g transform="translate(0 {low}) scale(1 -1)">{silk(top)}</g>', *line)
     return sheet
 
 
