@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -200,20 +199,6 @@ def frame(width: float, height: float) -> str:
     """Return a hairline border that follows the sheet's rounded corners."""
     return (f'<rect class="line-2" x="0.5" y="0.5" width="{width - 1}" '
             f'height="{height - 1}" rx="{RADIUS - 0.5}"/>')
-
-
-def wave(base: float, amp: float, period: float, length: float,
-         edge: float) -> str:
-    """Return path data for a sine wave along y=base, closed off at y=edge.
-
-    The wave runs from x=0 to x=length; with edge above base the shape is
-    filled upwards, with edge below it is filled downwards.
-    """
-    steps = int(length // 6) + 1
-    pts = " ".join(
-        f"{6 * i:.0f} {base + amp * math.sin(2 * math.pi * 6 * i / period):.1f}"
-        for i in range(steps))
-    return f"M0 {edge}L{pts}L{6 * (steps - 1):.0f} {edge}Z"
 
 
 def write_pair(name: str, build: Callable[[str], Sheet]) -> list[Path]:

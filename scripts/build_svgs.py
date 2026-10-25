@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 import argparse
-import math
 from datetime import date
 
-from svg import WIDE, Sheet, Text, display, label, wave, write_pair
+from svg import WIDE, Sheet, Text, display, label, write_pair
 
 EASE = "cubic-bezier(0.22, 1, 0.36, 1)"
 
@@ -21,32 +20,37 @@ def progress(today: date) -> float:
     return min(max((today - START).days / span, 0.0), 1.0)
 
 
-PERIOD = 300.0  # wave length; the drift moves one period per loop
-WAVE_CSS = f"""
-.drift {{ animation: drift linear infinite; }}
-.drift-back {{ animation: drift-back linear infinite; }}
-@keyframes drift {{ from {{ transform: translateX(0); }}
-  to {{ transform: translateX(-{PERIOD}px); }} }}
-@keyframes drift-back {{ from {{ transform: translateX(-{PERIOD}px); }}
-  to {{ transform: translateX(0); }} }}
+BEAT = 3.6  # seconds for one stripe to rise and fall
+WAVELENGTH = 34  # stripes per travelling wave
+STRIPE_CSS = f"""
+.stripe {{ transform-box: fill-box; animation: pulse-y {BEAT}s ease-in-out infinite; }}
+.up {{ transform-origin: bottom; }}
+.down {{ transform-origin: top; }}
+.stripes {{ animation: fade 0.8s {EASE} 0.2s both; }}
+@keyframes pulse-y {{ 0%, 100% {{ transform: scaleY(0.18); }} 50% {{ transform: scaleY(1); }} }}
 """
 
 
-def waves(bases: tuple[float, float, float], edge: float) -> str:
-    """Return three drifting wave layers: taupe at the back, navy in front.
+def stripes(y: float, length: float, grow: str, x0: float = 24.0,
+            x1: float = 576.0, gap: float = 8.0) -> str:
+    """Return the shirt's pinstripes as a row that rises and falls like a wave.
 
-    bases go back to front; edge is where the layers close off, so the
-    front layer melts into the card.
+    Stripes alternate taupe and chalk; grow is "up" (anchored at y, growing
+    upwards) or "down" (hanging from y). Each stripe starts a little later
+    in the beat than its left neighbour, so a wave travels along the row.
     """
-    layers = [("accent", 0.55, "drift", 13), ("paper-3", 1.0, "drift-back", 17),
-              ("paper", 1.0, "drift", 9)]
-    out = []
-    for (cls, alpha, move, secs), base in zip(layers, bases):
-        # back layers close off inside the front one, so their edges never show
-        close = edge if cls == "paper" else edge + math.copysign(12, base - edge)
-        d = wave(base, 7, PERIOD, 600 + PERIOD, close)
-        out.append(f'<g class="{move}" style="animation-duration: {secs}s">'
-                   f'<path class="{cls}" opacity="{alpha}" d="{d}"/></g>')
+    out = ['<g class="stripes">']
+    count = int((x1 - x0) // gap) + 1
+    for i in range(count):
+        x = x0 + i * gap
+        cls = "accent" if i % 2 == 0 else "ink"
+        alpha = 1.0 if i % 2 == 0 else 0.35
+        top = y - length if grow == "up" else y
+        delay = -BEAT * (i % WAVELENGTH) / WAVELENGTH
+        out.append(f'<rect class="{cls} stripe {grow}" opacity="{alpha}" '
+                   f'style="animation-delay: {delay:.2f}s" x="{x - 1:.1f}" '
+                   f'y="{top:.1f}" width="2" height="{length}" rx="1"/>')
+    out.append("</g>")
     return "".join(out)
 
 
@@ -77,9 +81,9 @@ def struck_line(face_size: float, before: str, after: str, x: float, y: float,
 
 
 def header(theme: str) -> Sheet:
-    """Return the slogan card, opening onto drifting waves at its bottom edge."""
-    sheet = Sheet(192, "Learning AI, the clean way (struck through) the real way.",
-                  theme, paper=False)
+    """Return the slogan card with a wave of pinstripes along its bottom."""
+    sheet = Sheet(204, "Learning AI, the clean way (struck through) the real way.",
+                  theme)
     x0 = 40.0
     face = display()
     per_px = (face.width("the clean way", 1) + face.width("the real way.", 1)) * 1.03
@@ -87,11 +91,9 @@ def header(theme: str) -> Sheet:
     first = Text(face, "Learning AI,", size, x0, 80)
     css, line = struck_line(size, "the clean way", "the real way.", x0,
                             80 + size * 1.12, "start", 0.0)
-    sheet.css = f".first {{ animation: fade 0.7s {EASE} both; }}{css}{WAVE_CSS}"
+    sheet.css = f".first {{ animation: fade 0.7s {EASE} both; }}{css}{STRIPE_CSS}"
     sheet.add(
-        # rounded on top, square at the bottom where the waves take over
-        '<path class="paper" d="M0 154V14A14 14 0 0 1 14 0H586A14 14 0 0 1 600 14V154Z"/>',
-        waves((182.0, 175.0, 166.0), 138.0),
+        stripes(190.0, 30.0, "up"),
         f'<g class="first">{first.svg()}</g>',
         *line,
     )
@@ -99,17 +101,12 @@ def header(theme: str) -> Sheet:
 
 
 def footer(theme: str) -> Sheet:
-    """Return the closing card: waves on top, "the end" struck for "to be continued."."""
-    sheet = Sheet(150, "The end (struck through) to be continued.", theme,
-                  paper=False)
-    css, line = struck_line(30.0, "the end", "to be continued.", 300.0, 112.0,
+    """Return the closing card: pinstripes hanging from the top, "the end" struck."""
+    sheet = Sheet(132, "The end (struck through) to be continued.", theme)
+    css, line = struck_line(30.0, "the end", "to be continued.", 300.0, 100.0,
                             "middle", 0.3)
-    sheet.css = css + WAVE_CSS
-    sheet.add(
-        '<path class="paper" d="M0 42H600V136A14 14 0 0 1 586 150H14A14 14 0 0 1 0 136Z"/>',
-        waves((14.0, 22.0, 32.0), 60.0),
-        *line,
-    )
+    sheet.css = css + STRIPE_CSS
+    sheet.add(stripes(14.0, 30.0, "down"), *line)
     return sheet
 
 
