@@ -13,3 +13,8 @@ exclude_from_languages:
 fold_languages:
   - Makefile
   - Dockerfile
+
+# Languages shown first in the language bar, in this order; the rest follow by size.
+language_order:
+  - Python
+  - C

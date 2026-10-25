@@ -129,6 +129,17 @@ def shares(sizes: Counter[str], keep: int = 3) -> list[dict[str, Any]]:
     return rows
 
 
+def ordered(rows: list[dict[str, Any]], first: list[str]) -> list[dict[str, Any]]:
+    """Return language rows with first in that order, then by share, other last."""
+    def key(row: dict[str, Any]) -> tuple[int, float]:
+        if row["name"] in first:
+            return first.index(row["name"]), 0.0
+        if row["name"] == "other":
+            return len(first) + 1, 0.0
+        return len(first), -row["share"]
+    return sorted(rows, key=key)
+
+
 # Drawing ---------------------------------------------------------------
 
 FIGURES = [
@@ -165,12 +176,14 @@ def odometer(value: int, x: float, baseline: float, size: float,
     return "".join(defs), "".join(body)
 
 
-def stats_sheet(theme: str, data: dict[str, Any]) -> Sheet:
+def stats_sheet(theme: str, data: dict[str, Any],
+                first: list[str] | None = None) -> Sheet:
     """Return the register of four figures over the language bar."""
+    languages = ordered(data["languages"], first or [])
     langs = ", ".join(f"{row['name']} {round(row['share'] * 100)}%"
-                      for row in data["languages"])
+                      for row in languages)
     sheet = Sheet(
-        232,
+        212,
         f"{data['contributions']} contributions, {data['commits']} commits "
         f"and {data['active_days']} active days in the last 12 months, "
         f"{data['repositories']} repositories. Languages: {langs}.",
@@ -186,41 +199,41 @@ def stats_sheet(theme: str, data: dict[str, Any]) -> Sheet:
     x0, x1 = 28.0, WIDE - 28.0
     cell = (x1 - x0) / 4
     defs: list[str] = []
-    body = [frame(WIDE, 232),
-            f'<path class="line" d="M{x0} 34H{x1}M{x0} 150H{x1}"/>']
+    body = [frame(WIDE, 212),
+            f'<path class="line" d="M{x0} 30H{x1}M{x0} 140H{x1}"/>']
     for i, (key, line1, line2) in enumerate(FIGURES):
         cx = x0 + i * cell
         if i:
-            body.append(f'<path class="line-2" d="M{cx} 34V150"/>')
-        d, b = odometer(int(data[key]), cx + 12, 94, 46, 0.2 + 0.15 * i)
+            body.append(f'<path class="line-2" d="M{cx} 30V140"/>')
+        d, b = odometer(int(data[key]), cx + 12, 84, 40, 0.2 + 0.15 * i)
         defs.append(d)
         body.append(b)
         body.append('<g class="label">'
-                    + Text(display(), line1, 18, cx + 12, 122, cls="muted").svg()
-                    + Text(display(), line2, 18, cx + 12, 143, cls="muted").svg()
+                    + Text(display(), line1, 15, cx + 12, 110, cls="muted").svg()
+                    + Text(display(), line2, 15, cx + 12, 128, cls="muted").svg()
                     + "</g>")
 
     fills = ["ink", "accent", "muted", "paper-2"]
-    bx, by, bh = x0, 192.0, 12.0
+    bx, by, bh = x0, 178.0, 10.0
     start = bx
-    for i, row in enumerate(data["languages"]):
+    for i, row in enumerate(languages):
         w = (x1 - bx) * row["share"]
         fill = fills[min(i, len(fills) - 1)]
         style = f"animation-delay: {0.6 + 0.25 * i:.2f}s"
         body.append(f'<rect class="{fill} seg from-left" style="{style}" x="{start:.1f}" '
                     f'y="{by}" width="{w:.1f}" height="{bh}"/>')
-        label_x = start if i < len(data["languages"]) - 1 or w > 90 else x1
+        label_x = start if i < len(languages) - 1 or w > 90 else x1
         anchor = "start" if label_x == start else "end"
-        name = Text(display(), row["name"], 18, label_x, by - 10, anchor=anchor)
+        name = Text(display(), row["name"], 15, label_x, by - 10, anchor=anchor)
         pct = f"{round(row['share'] * 100)}%"
         if anchor == "start":
-            pct_text = Text(label(), pct, 16, name.left + name.width + 6, by - 10,
+            pct_text = Text(label(), pct, 13, name.left + name.width + 5, by - 10,
                             cls="muted")
         else:
-            pct_text = Text(label(), pct, 16, x1, by - 10, anchor="end",
+            pct_text = Text(label(), pct, 13, x1, by - 10, anchor="end",
                             cls="muted")
-            name = Text(display(), row["name"], 18,
-                        x1 - pct_text.width - 6, by - 10, anchor="end")
+            name = Text(display(), row["name"], 15,
+                        x1 - pct_text.width - 5, by - 10, anchor="end")
         body.append(f'<g class="label">{name.svg()}{pct_text.svg()}</g>')
         if i:
             body.append(f'<path class="line" d="M{start:.1f} {by - 4}V{by + bh + 4}"/>')
@@ -306,7 +319,8 @@ def main() -> None:
         data = collect(graphql(QUERY, token()), load_config(), args.today)
         DATA.parent.mkdir(exist_ok=True)
         DATA.write_text(json.dumps(data, indent=1) + "\n", encoding="utf-8")
-    write_pair("stats", lambda theme: stats_sheet(theme, data))
+    first = load_config().get("language_order") or []
+    write_pair("stats", lambda theme: stats_sheet(theme, data, first))
     write_pair("activity", lambda theme: activity_sheet(theme, data))
 
 

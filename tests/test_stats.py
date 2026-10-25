@@ -102,3 +102,10 @@ def test_sheets_render_both_themes_with_reduced_motion(theme):
         assert svg.startswith("<svg") and svg.rstrip().endswith("</svg>")
         assert "prefers-reduced-motion: reduce" in svg
         assert "<title" in svg
+
+
+def test_ordered_puts_chosen_languages_first_and_other_last():
+    rows = [{"name": "C", "share": 0.5}, {"name": "other", "share": 0.02},
+            {"name": "Go", "share": 0.08}, {"name": "Python", "share": 0.4}]
+    names = [r["name"] for r in stats.ordered(rows, ["Python", "C"])]
+    assert names == ["Python", "C", "Go", "other"]

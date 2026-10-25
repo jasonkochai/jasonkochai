@@ -3,6 +3,7 @@
 <style>:root { --paper: #17375e; --paper-2: #122d4f; --paper-3: #0d2340; --ink: #efe9e4; --ink-2: #d9d1cb; --muted: #93a6bd; --accent: #a5908b; --rule: rgba(239, 233, 228, 0.55); --rule-2: rgba(239, 233, 228, 0.18); --grid: rgba(239, 233, 228, 0.07); --grid-2: rgba(239, 233, 228, 0.14); }
 .paper { fill: var(--paper); }
 .paper-2 { fill: var(--paper-2); }
+.paper-3 { fill: var(--paper-3); }
 .ink { fill: var(--ink); }
 .muted { fill: var(--muted); }
 .accent { fill: var(--accent); }
