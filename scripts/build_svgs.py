@@ -20,38 +20,45 @@ def progress(today: date) -> float:
     return min(max((today - START).days / span, 0.0), 1.0)
 
 
-BEAT = 3.6  # seconds for one stripe to rise and fall
-WAVELENGTH = 34  # stripes per travelling wave
-STRIPE_CSS = f"""
-.stripe {{ transform-box: fill-box; animation: pulse-y {BEAT}s ease-in-out infinite; }}
-.up {{ transform-origin: bottom; }}
-.down {{ transform-origin: top; }}
-.stripes {{ animation: fade 0.8s {EASE} 0.2s both; }}
-@keyframes pulse-y {{ 0%, 100% {{ transform: scaleY(0.18); }} 50% {{ transform: scaleY(1); }} }}
+RISE = 20.0  # how much the cut climbs from left to right
+CUT_CSS = f"""
+.band {{ animation: grow-x 0.8s {EASE} 0.2s both; }}
+.thread {{ transform-box: fill-box; transform-origin: right;
+  animation: grow-x 0.9s {EASE} 0.45s both; }}
+.glint {{ animation: glint 4.5s ease-in-out 1.4s infinite; }}
+@keyframes glint {{ 0% {{ transform: translateX(-140px); }}
+  55%, 100% {{ transform: translateX(740px); }} }}
 """
 
 
-def stripes(y: float, length: float, grow: str, x0: float = 24.0,
-            x1: float = 576.0, gap: float = 8.0) -> str:
-    """Return the shirt's pinstripes as a row that rises and falls like a wave.
+def cut(name: str, y: float, side: str) -> str:
+    """Return the slanted cut: a taupe band with a glint and a chalk thread.
 
-    Stripes alternate taupe and chalk; grow is "up" (anchored at y, growing
-    upwards) or "down" (hanging from y). Each stripe starts a little later
-    in the beat than its left neighbour, so a wave travels along the row.
+    y is where the cut meets the left edge; it climbs RISE to the right.
+    side "below" puts band and thread under the card (header), "above" puts
+    them over it (footer).
     """
-    out = ['<g class="stripes">']
-    count = int((x1 - x0) // gap) + 1
-    for i in range(count):
-        x = x0 + i * gap
-        cls = "accent" if i % 2 == 0 else "ink"
-        alpha = 1.0 if i % 2 == 0 else 0.35
-        top = y - length if grow == "up" else y
-        delay = -BEAT * (i % WAVELENGTH) / WAVELENGTH
-        out.append(f'<rect class="{cls} stripe {grow}" opacity="{alpha}" '
-                   f'style="animation-delay: {delay:.2f}s" x="{x - 1:.1f}" '
-                   f'y="{top:.1f}" width="2" height="{length}" rx="1"/>')
-    out.append("</g>")
-    return "".join(out)
+    def edge(offset: float) -> tuple[float, float]:
+        return y + offset, y - RISE + offset
+
+    sign = 1 if side == "below" else -1
+    (a0, a1), (b0, b1) = edge(0), edge(10 * sign)
+    t0, t1 = edge(17 * sign)
+    band = f"M0 {a0}L600 {a1}L600 {b1}L0 {b0}Z"
+    return (
+        f'<defs><clipPath id="{name}-band"><path d="{band}"/></clipPath>'
+        f'<linearGradient id="{name}-shine" x1="0" x2="1">'
+        '<stop offset="0" stop-color="#fff" stop-opacity="0"/>'
+        '<stop offset="0.5" stop-color="#fff" stop-opacity="0.55"/>'
+        '<stop offset="1" stop-color="#fff" stop-opacity="0"/>'
+        "</linearGradient></defs>"
+        f'<path class="accent band from-left" d="{band}"/>'
+        f'<g clip-path="url(#{name}-band)"><rect class="glint" x="0" '
+        f'y="{min(a1, b1) - 2}" width="110" height="{RISE + 14}" '
+        f'fill="url(#{name}-shine)"/></g>'
+        f'<path class="ink thread" opacity="0.4" '
+        f'd="M0 {t0 - 1}L600 {t1 - 1}L600 {t1 + 1}L0 {t0 + 1}Z"/>'
+    )
 
 
 def struck_line(face_size: float, before: str, after: str, x: float, y: float,
@@ -81,19 +88,21 @@ def struck_line(face_size: float, before: str, after: str, x: float, y: float,
 
 
 def header(theme: str) -> Sheet:
-    """Return the slogan card with a wave of pinstripes along its bottom."""
+    """Return the slogan card, cut off at a slant above a taupe band."""
     sheet = Sheet(204, "Learning AI, the clean way (struck through) the real way.",
-                  theme)
-    x0 = 40.0
+                  theme, paper=False)
+    x0, y = 40.0, 178.0
     face = display()
     per_px = (face.width("the clean way", 1) + face.width("the real way.", 1)) * 1.03
     size = min(50.0, (600 - 2 * x0) / per_px)
     first = Text(face, "Learning AI,", size, x0, 80)
     css, line = struck_line(size, "the clean way", "the real way.", x0,
                             80 + size * 1.12, "start", 0.0)
-    sheet.css = f".first {{ animation: fade 0.7s {EASE} both; }}{css}{STRIPE_CSS}"
+    sheet.css = f".first {{ animation: fade 0.7s {EASE} both; }}{css}{CUT_CSS}"
     sheet.add(
-        stripes(190.0, 30.0, "up"),
+        f'<path class="paper" d="M0 {y}V14A14 14 0 0 1 14 0H586A14 14 0 0 1 600 14'
+        f'V{y - RISE}Z"/>',
+        cut("header", y, "below"),
         f'<g class="first">{first.svg()}</g>',
         *line,
     )
@@ -101,12 +110,19 @@ def header(theme: str) -> Sheet:
 
 
 def footer(theme: str) -> Sheet:
-    """Return the closing card: pinstripes hanging from the top, "the end" struck."""
-    sheet = Sheet(132, "The end (struck through) to be continued.", theme)
-    css, line = struck_line(30.0, "the end", "to be continued.", 300.0, 100.0,
+    """Return the closing card: the same slanted cut on top, "the end" struck."""
+    height, y = 134, 44.0
+    sheet = Sheet(height, "The end (struck through) to be continued.", theme,
+                  paper=False)
+    css, line = struck_line(30.0, "the end", "to be continued.", 300.0, 104.0,
                             "middle", 0.3)
-    sheet.css = css + STRIPE_CSS
-    sheet.add(stripes(14.0, 30.0, "down"), *line)
+    sheet.css = css + CUT_CSS
+    sheet.add(
+        f'<path class="paper" d="M0 {y}L600 {y - RISE}V{height - 14}'
+        f'A14 14 0 0 1 586 {height}H14A14 14 0 0 1 0 {height - 14}Z"/>',
+        cut("footer", y, "above"),
+        *line,
+    )
     return sheet
 
 
