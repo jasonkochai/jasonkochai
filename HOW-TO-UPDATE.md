@@ -46,7 +46,7 @@ Brand colours from the profile photo: studio navy and the taupe of the shirt, th
 - Navy cards in dark mode, a light blue-grey card in light mode, taupe as the only accent.
 - Familjen Grotesk for everything (OFL, in `scripts/fonts/`). Text inside the SVGs is outlined from the font, so it renders the same everywhere.
 - The header strikes through "the clean way" and brings in "the real way.". Your 42 Berlin progress is a thin line at the top of the 42 Berlin section.
-- The header card is cut off at a slant over a taupe band and a thin chalk line; the band draws in like the strike-through and a glint keeps sliding along it. The footer mirrors the cut on its top edge and strikes "the end" for "to be continued.". Slant: `RISE` in `scripts/build_svgs.py`.
+- The header card ends in a silk edge: a taupe ribbon and two chalk threads that slowly bend and twist, each on its own timing, so the edge never repeats in step. The footer mirrors it on top and strikes "the end" for "to be continued.". Shapes: `FRONT` and `RIBBON` in `scripts/build_svgs.py`.
 - Stats, activity and the 42 Berlin line are drawn on a wider canvas (`WIDE` in `scripts/svg.py`), so they fill the README width but render smaller. Raise `WIDE` to shrink them further.
 
 Colours live as tokens in `THEMES` in `scripts/svg.py`. Every animation stops under "reduce motion".
