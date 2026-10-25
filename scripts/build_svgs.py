@@ -117,11 +117,12 @@ def school(theme: str, today: date) -> Sheet:
     """Return the 42 Berlin progress line: share done, filling track, today pulsing."""
     done = progress(today)
     pct = round(done * 100)
-    # 5px more room on top evens out the gap GitHub leaves under inline images
-    height = 45
+    # the heading adds 16px above and the table 5px below; this places the
+    # line midway between them, with room for the pulse
+    height = 41
     sheet = Sheet(height, f"42 Berlin, {START:%m/%Y} to {FINISH:%m/%Y}: {pct}% done.",
                   theme, width=WIDE, paper=False)
-    y = 25.0
+    y = 15.0
     left = Text(display(), f"{pct}% done", 17, 0, y + 6)
     right = Text(label(), f"{FINISH:%m/%Y}", 15, WIDE, y + 5, anchor="end",
                  cls="muted")
