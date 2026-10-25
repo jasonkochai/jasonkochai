@@ -68,9 +68,7 @@ I build what I can't stop thinking about, then ship it. Right now that's mostly 
   <img src="assets/activity-light.svg" width="100%" alt="Contributions per week since my first commit.">
 </picture>
 
-<sub>Stats come from all my repositories, private ones included, drawn by <a href="scripts/stats.py">stats.py</a> and rebuilt every night with the snake. Project tables are generated from <a href="projects.yml">projects.yml</a>.</sub>
-
-**What I learned:** Python, C, object-oriented design, data structures, graph algorithms, memory management, Linux system administration, Docker, Git, multi-agent AI systems, teamwork
+<sub>Includes private repositories.</sub>
 
 <!-- projects:42:start -->
 ## 42 Berlin
