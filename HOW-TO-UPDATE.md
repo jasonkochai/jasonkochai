@@ -53,7 +53,7 @@ Colours live as tokens in `THEMES` in `scripts/svg.py`. Every animation stops un
 
 ## Widgets
 
-- **Typing line** under the header: edit the `lines=` part of its URL in `README.md`. Sentences are separated by `;`, spaces are `+`, a comma is `%2C`.
+- **Typing line** under the header: `SENTENCES` in `scripts/build_svgs.py` (drawn into `assets/typing-*.svg`, no outside service). Run `.venv/bin/python scripts/build_svgs.py` after editing.
 - **Badges and stack:** plain `<img>` tags in `README.md` (shields.io and skillicons.dev).
 - **Snake:** the **snake** workflow redraws it every night onto the `output` branch. Run it once by hand (Actions, snake, Run workflow) after the first push.
 

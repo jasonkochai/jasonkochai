@@ -6,7 +6,7 @@
 </picture>
 
 <p>
-<img src="https://readme-typing-svg.demolab.com?font=Familjen+Grotesk&weight=500&size=21&duration=2600&pause=1400&color=8A746E&center=true&vCenter=true&width=560&lines=Obsessed+with+AI;Claude+Code+is+my+daily+driver;Building+Juniper%2C+my+own+multi-agent+assistant;Self-hosting+on+my+home+server+and+a+VPS;Many+more+projects+in+the+works;Learning+software+engineering+at+42+Berlin" alt="Obsessed with AI. Claude Code is my daily driver. Building Juniper, my own multi-agent assistant. Self-hosting on my home server and a VPS. Many more projects in the works. Learning software engineering at 42 Berlin.">
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/typing-dark.svg"><img src="assets/typing-light.svg" width="600" alt="Obsessed with AI. Claude Code is my daily driver. Building Juniper, my own multi-agent assistant. Self-hosting on my home server and a VPS. Many more projects in the works. Learning software engineering at 42 Berlin."></picture>
 <br>
 <a href="https://linkedin.com/in/jason-koch-ai"><img src="https://img.shields.io/badge/LinkedIn-17375e?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik00IDloMy41djExSDR6TTUuNzUgMy41YTIgMiAwIDEgMSAwIDQgMiAyIDAgMCAxIDAtNHpNOS41IDloMy40djEuNmMuNS0uOSAxLjctMS45IDMuNi0xLjkgMy42IDAgNC4yIDIuMyA0LjIgNS40VjIwaC0zLjV2LTUuMmMwLTEuMyAwLTIuOS0xLjgtMi45cy0yLjEgMS40LTIuMSAyLjhWMjBIOS41eiIvPjwvc3ZnPg%3D%3D" alt="LinkedIn"></a>
 <a href="https://x.com/jasonkochai"><img src="https://img.shields.io/badge/X-17375e?style=for-the-badge&logo=x&logoColor=white" alt="X"></a>
