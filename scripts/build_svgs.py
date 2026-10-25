@@ -25,9 +25,9 @@ Curve = tuple[float, tuple[float, float], tuple[float, float], float]
 FRONT: list[Curve] = [(196, (150, 150), (420, 232), 170),
                       (160, (200, 226), (380, 150), 204),
                       (184, (120, 160), (470, 214), 158)]
-RIBBON: list[Curve] = [(214, (180, 240), (400, 170), 200),
-                       (190, (160, 170), (430, 246), 222),
-                       (206, (220, 236), (380, 180), 184)]
+RIBBON: list[Curve] = [(204, (180, 166), (400, 236), 182),
+                       (172, (220, 232), (360, 166), 212),
+                       (194, (150, 176), (450, 222), 168)]
 EASE_SPLINE = "0.45 0 0.55 1"
 
 
@@ -74,7 +74,8 @@ def silk(top: float = 0.0) -> str:
     Every layer bends between its own shapes on its own timing, so the edge
     keeps moving without ever repeating in step.
     """
-    threads = [_between(FRONT, RIBBON, 0.45, 1), _between(FRONT, RIBBON, 0.8, 2)]
+    # threads run just past the ribbon; where they rise above the card it hides them
+    threads = [_between(FRONT, RIBBON, 1.35, 1), _between(FRONT, RIBBON, 1.5, 2)]
     parts = [f'<path class="accent">{_morph([_band(c, top) for c in RIBBON], 14)}</path>']
     for curves, secs, alpha in zip(threads, (9, 17), (0.6, 0.35)):
         parts.append(f'<path class="thread" opacity="{alpha}">'
@@ -120,7 +121,7 @@ def struck_line(face_size: float, before: str, after: str, x: float, y: float,
 
 def header(theme: str) -> Sheet:
     """Return the slogan card, its bottom edge flowing like silk."""
-    sheet = Sheet(238, "Learning AI, the clean way (struck through) the real way.",
+    sheet = Sheet(244, "Learning AI, the clean way (struck through) the real way.",
                   theme, paper=False)
     x0 = 40.0
     face = display()
@@ -136,7 +137,7 @@ def header(theme: str) -> Sheet:
 
 def footer(theme: str) -> Sheet:
     """Return the closing card: the same silk edge mirrored on top, "the end" struck."""
-    top, low = 110.0, 238.0  # card starts at top; low is the deepest the ribbon gets
+    top, low = 110.0, 244.0  # card starts at top; low is just past the deepest thread
     height = low - top
     sheet = Sheet(int(height), "The end (struck through) to be continued.", theme,
                   paper=False)
