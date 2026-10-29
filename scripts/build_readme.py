@@ -109,15 +109,21 @@ def _cell(text: str) -> str:
 
 
 def _links(p: dict[str, Any]) -> str:
-    links = p.get("links") or {}
+    links = {k: v for k, v in (p.get("links") or {}).items() if k != "Code"}
     return ", ".join(f"[{label}]({url})" for label, url in links.items())
 
 
 def _row(p: dict[str, Any]) -> str:
+    """Return a table row; the name links to the repo when there is a Code link."""
+    name = f"**{_cell(p['name'])}**"
+    code = (p.get("links") or {}).get("Code")
+    if code:
+        name = f"[{name}]({code})"
     what = _cell(p["one_liner"])
-    if p.get("links"):
-        what += f"<br>{_links(p)}"
-    return f"| **{_cell(p['name'])}** | {what} |"
+    extra = _links(p)
+    if extra:
+        what += f"<br>{extra}"
+    return f"| {name} | {what} |"
 
 
 def _table(rows: list[dict[str, Any]]) -> list[str]:

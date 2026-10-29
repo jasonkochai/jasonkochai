@@ -82,11 +82,19 @@ def test_no_own_projects_renders_nothing():
     assert br.render_own([project(group="42")]) == ""
 
 
-def test_rows_show_name_and_links_without_status():
+def test_rows_link_the_name_to_code_without_status():
     out = br.render_own([project(status="paused")])
-    assert "| **Thing** |" in out
+    assert "| [**Thing**](https://example.com/thing) |" in out
     assert "paused" not in out
-    assert "[Code](https://example.com/thing)" in out
+    assert "[Code]" not in out
+
+
+def test_rows_keep_other_links_and_plain_names_without_code():
+    links = {"Demo": "https://example.com/demo", "Code": "https://example.com/thing"}
+    out = br.render_own([project(links=links)])
+    assert "<br>[Demo](https://example.com/demo) |" in out
+    bare = br.render_own([project(status="building", links={})])
+    assert "| **Thing** |" in bare
 
 
 def test_42_section_opens_with_the_progress_card():
