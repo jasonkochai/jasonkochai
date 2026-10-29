@@ -26,7 +26,7 @@ I build what I can't stop thinking about, then ship it. Right now that's AI agen
 
 | Project | What it does |
 |:---|:---|
-| **Juniper** | Multi-agent personal assistant on OpenClaw, self-hosted in Docker on my home server. One Telegram forum topic per agent: news, events, email, calendar, notes. Each agent gets only the tools and the model its job needs. |
+| [**Juniper**](https://github.com/jasonkochai/juniper) | Multi-agent personal assistant on OpenClaw, self-hosted in Docker on my home server. One Telegram forum topic per agent: news, events, email, calendar, notes. Each agent gets only the tools and the model its job needs. |
 | **More soon** | More projects are in the works. |
 
 <!-- projects:own:end -->
@@ -78,10 +78,10 @@ I build what I can't stop thinking about, then ship it. Right now that's AI agen
 
 | Project | What it does |
 |:---|:---|
-| **Fly-in** | Routes a drone fleet through a capacity-limited graph in the fewest turns with a time-expanded search. Hits the known optimum on every map. Python.<br>[Watch it solve](https://fly-in-showcase.vercel.app), [Code](https://github.com/jasonkochai/42-Fly-in) |
-| **A-maze-ing** | Maze generator with a terminal visualiser. Team project: I built the application layer on a pip-installable engine by [@PhilipHim](https://github.com/PhilipHim). Python.<br>[Code](https://github.com/jasonkochai/42-A-maze-ing) |
-| **push_swap** | Sorts a stack with 11 allowed operations, choosing its strategy by the measured disorder of the input. C, team lead.<br>[Code](https://github.com/jasonkochai/42-push_swap) |
-| **Born2beRoot** | Hardened Debian 13 server: encrypted LVM, UFW, Fail2ban, a WordPress stack and a Bash monitoring script.<br>[Code](https://github.com/jasonkochai/42-Born2beRoot) |
+| [**Fly-in**](https://github.com/jasonkochai/42-Fly-in) | Routes a drone fleet through a capacity-limited graph in the fewest turns with a time-expanded search. Hits the known optimum on every map. Python.<br>[Watch it solve](https://fly-in-showcase.vercel.app) |
+| [**A-maze-ing**](https://github.com/jasonkochai/42-A-maze-ing) | Maze generator with a terminal visualiser. Team project: I built the application layer on a pip-installable engine by [@PhilipHim](https://github.com/PhilipHim). Python. |
+| [**push_swap**](https://github.com/jasonkochai/42-push_swap) | Sorts a stack with 11 allowed operations, choosing its strategy by the measured disorder of the input. C, team lead. |
+| [**Born2beRoot**](https://github.com/jasonkochai/42-Born2beRoot) | Hardened Debian 13 server: encrypted LVM, UFW, Fail2ban, a WordPress stack and a Bash monitoring script. |
 
 <!-- projects:42:end -->
 

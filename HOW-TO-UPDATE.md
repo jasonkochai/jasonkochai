@@ -6,10 +6,10 @@
    - `group: own` for your own work, `group: "42"` for 42 Berlin.
    - `status: shipped`, `building` or `paused`. Your own work goes into the What I'm building table, shipped first. The last row, **More soon**, is fixed (`MORE_ROW` in `scripts/build_readme.py`).
    - `one_liner`: what it does plus the interesting technical bit. No em dashes, no middle dots, no "passionate" or "seamless". The build fails on those.
-   - `links`: `Label: https://...`, in the order they should show. A shipped project needs at least one.
+   - `links`: `Label: https://...`, in the order they should show. A shipped project needs at least one. A `Code` link makes the project name itself clickable and is not listed again.
    - `image` (optional): `light`, `dark` and `alt` for a drawing or screenshot in `assets/`.
 2. Push to `main`. The **readme** workflow rewrites the project tables in `README.md` and commits the result.
-3. Juniper's diagram lives in the private repo `jasonkochai/juniper`. When you make that repo public, add `Code: https://github.com/jasonkochai/juniper` under its `links`.
+3. Juniper is public at `jasonkochai/juniper` and linked from its name. Switch its `status` when it ships.
 
 To preview locally:
 
