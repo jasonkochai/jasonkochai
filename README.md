@@ -19,7 +19,7 @@
 
 I build what I can't stop thinking about, then ship it. Right now that's AI agents, automations and projects I care about. Software engineering at [42 Berlin](https://42berlin.de) until 10/2027.
 
-**Open to** a working-student or part-time role, 15 to 30 hours a week, remote or in person in Berlin.
+**Currently** part-time software developer at InsurMagic.
 
 <!-- projects:own:start -->
 ## What I'm building
